@@ -7,6 +7,8 @@ class People(models.Model):
     phone = models.BigIntegerField(unique=True,null=True)
     is_people = models.BooleanField(default=True)
 
+    def __str__(self):
+        return str(self.people)
 
 
 gender = [

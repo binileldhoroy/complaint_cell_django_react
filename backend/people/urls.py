@@ -11,7 +11,7 @@ urlpatterns = [
 
     path('',views.getRoutes,name='routes'),
     path('signup/',views.RegisterView.as_view()),
-    # path('personalinfo/',views.personalView),
-    # path('profile/',views.userProfile),
+    path('personalinfo/',views.personalView),
+    path('profile/',views.userProfile),
 
 ]

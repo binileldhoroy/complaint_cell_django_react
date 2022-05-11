@@ -33,3 +33,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         People.objects.create(people=user,phone=validated_data['phone'])
 
         return user
+
+
+class PersonalInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalInfo
+        fields = '__all__'
+
+
+class PeopleInfoGet(serializers.ModelSerializer):
+    people = RegisterSerializer()
+    class Meta:
+        model = People
+        fields = '__all__'
+
+class PersonalInfoSerializerGet(serializers.ModelSerializer):
+    people = PeopleInfoGet()
+    class Meta:
+        model = PersonalInfo
+        fields = '__all__'
