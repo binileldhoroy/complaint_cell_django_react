@@ -30,6 +30,10 @@ def getRoutes(request):
     routes = [
         'api/token/',
         'api/token/refresh/',
+        'api/signup/',
+        'api/personalinfo/',
+        'api/profile/',
+
     ]
     return Response(routes)
 

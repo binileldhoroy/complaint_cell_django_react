@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'people',
     'police',
+    'lawyer',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
+    'storages',
 ]
 
 REST_FRAMEWORK = {
@@ -175,3 +177,15 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AWS_QUERYSTRING_AUTH = False
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIAZTUMCLXW7XI3LTXA'
+AWS_SECRET_ACCESS_KEY = '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'
+
+AWS_STORAGE_BUCKET_NAME = 'binil-complaintcell-bucket'
+
+
+
