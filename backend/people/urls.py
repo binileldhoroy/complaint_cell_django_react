@@ -13,5 +13,7 @@ urlpatterns = [
     path('signup/',views.RegisterView.as_view()),
     path('personalinfo/',views.personalView),
     path('profile/',views.userProfile),
+    path('newcomplaint/',views.complaintRegistration),
+
 
 ]

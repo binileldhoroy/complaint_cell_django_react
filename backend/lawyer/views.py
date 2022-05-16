@@ -30,10 +30,13 @@ class LawyerRegisterView(generics.CreateAPIView):
 
 @api_view(['POST'])
 def lawyerPersonalView(request):
+    user = request.user
+    try:
+        user = User.objects.get(username = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
     serializers = LawyerPersonalInfoSerializer(data=request.data)
-    user = User.objects.get(username = 'adrash')
-    lawyer = Lawyer.objects.get(lawyer_id = user)
-    print(lawyer)
     if serializers.is_valid():
         print('success')
         serializers.save(lawyer_id = lawyer)
@@ -45,25 +48,37 @@ def lawyerPersonalView(request):
 
 @api_view(['POST'])
 def lawyerOfficeView(request):
-    serializers = LawyerOfficeSerializer(data=request.data)
-    user = User.objects.get(username = 'adrash')
-    lawyer = Lawyer.objects.get(lawyer_id = user)
-    if serializers.is_valid():
-        serializers.save(lawyer_id = lawyer)
-        return Response(serializers.data)
+    user = request.user
+    try:
+        lawyer = Lawyer.objects.get(lawyer = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    if lawyer.is_lawyer:
+        serializers = LawyerOfficeSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save(lawyer_id = lawyer)
+            return Response(serializers.data)
+        else:
+            data = serializers.errors
+            return Response(data)
     else:
-        data = serializers.errors
+        data = {'Your request is pending at admin'}
         return Response(data)
 
 
 @api_view(['GET'])
 def lawyerProfile(request):
-    # if request.user.is_people:
-    user = User.objects.get(username = 'adrash')
-    lawyer = Lawyer.objects.get(lawyer = user)
-    pinfo = LawyerPersonalInfo.objects.get(lawyer_id = lawyer)
-    serializers = LawyerProfileGetSerializer(pinfo)
-    return Response(serializers.data)
-    # else:
-    #     data = {'error'}
-    #     return Response(data)
+    user = request.user
+    try:
+        lawyer = Lawyer.objects.get(lawyer = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    if lawyer.is_lawyer:
+        pinfo = LawyerPersonalInfo.objects.get(lawyer_id = lawyer)
+        serializers = LawyerProfileGetSerializer(pinfo)
+        return Response(serializers.data)
+    else:
+        data = {'Your request is pending at admin'}
+        return Response(data)

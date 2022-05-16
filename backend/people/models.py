@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
+from .utils import generateRefCode
+
 class People(models.Model):
     people = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
     phone = models.BigIntegerField(unique=True,null=True)
@@ -53,3 +55,50 @@ class PersonalInfo(models.Model):
     state = models.CharField(max_length=100,null=True)
     police_district = models.CharField(max_length=100,null=True)
     police_station = models.CharField(max_length=100,null=True)
+
+
+compalaint_type = [
+    ('Against Public','Against Public'),
+    ('Against Organization','Against Organization'),
+    ('Against Police Officer','Against Police Officer'),
+    ('Against Publice Servent','Against Publice Servent'),
+    ('Wild Life Case','Wild Life Case'),
+    ('Against Department','Against Department'),
+    ('CYBER CRIME','CYBER CRIME')
+]
+
+comp_status_type = [
+    ('Registred','Registred'),
+    ('Opened','Opened'),
+    ('Closed','Closed')
+]
+
+case_status = [
+    ('Opened','Opened'),
+    ('FIR Registred','FIR Registred'),
+    ('Disposed','Disposed')
+]
+
+class ComplaintRegistration(models.Model):
+    people = models.ForeignKey(People,on_delete=models.SET_NULL,null=True)
+    complaint_nature = models.CharField(max_length=150,choices=compalaint_type,null=True)
+    incident_place = models.CharField(max_length=150,null=True)
+    police_district = models.CharField(max_length=150,null=True)
+    police_place = models.CharField(max_length=150,null=True)
+    incident_date = models.DateTimeField(null=True)
+    file_discription = models.CharField(max_length=150,null=True)
+    file_upload = models.FileField(upload_to='media',null=True)
+    compalaint_description = models.TextField(null=True)
+    complaint_status = models.CharField(max_length=150,choices=comp_status_type,null=True,default='Registred')
+    case_status  = models.CharField(max_length=150,choices=case_status,null=True)
+    ref_number = models.CharField(max_length=12,blank=True,null=True)
+
+    def __str__(self):
+        return self.complaint_nature
+
+    
+    def save(self, *args, **kwargs):
+        if self.ref_number == '' and self.ref_number == None:
+            ref_number = generateRefCode()
+            self.ref_number = ref_number
+        super().save(*args, **kwargs)

@@ -1,6 +1,10 @@
 from rest_framework import serializers 
 from django.contrib.auth.password_validation import validate_password
+
 from .models import *
+
+from people.models import ComplaintRegistration
+from people.serializers import PeopleInfoGet
 
 
 class PoliceRegisterSerializer(serializers.ModelSerializer):
@@ -44,3 +48,16 @@ class PoliceRegisterSerializer(serializers.ModelSerializer):
         ps_district=validated_data['ps_district'],ps_place=validated_data['ps_place'])
 
         return user
+
+
+class GetComplaints(serializers.ModelSerializer):
+    people = PeopleInfoGet()
+    class Meta:
+        model = ComplaintRegistration
+        fields = '__all__'
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddNote 
+        fields = '__all__'

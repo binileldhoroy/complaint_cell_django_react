@@ -33,7 +33,7 @@ def getRoutes(request):
         'api/signup/',
         'api/personalinfo/',
         'api/profile/',
-
+        'api/newcomplaint/',
     ]
     return Response(routes)
 
@@ -46,10 +46,13 @@ class RegisterView(generics.CreateAPIView):
 
 @api_view(['POST'])
 def personalView(request):
+    user = request.user
+    try:
+        people = People.objects.get(people = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
     serializers = PersonalInfoSerializer(data=request.data)
-    user = User.objects.get(username = 'athul')
-    people = People.objects.get(people = user)
-    print(people)
     if serializers.is_valid():
         print('success')
         serializers.save(people = people)
@@ -60,12 +63,37 @@ def personalView(request):
 
 @api_view(['GET'])
 def userProfile(request):
-    # if request.user.is_people:
-    user = User.objects.get(username = 'athul')
-    people = People.objects.get(people = user)
-    pinfo = PersonalInfo.objects.get(people = people)
-    serializers = PersonalInfoSerializerGet(pinfo)
-    return Response(serializers.data)
-    # else:
-    #     data = {'error'}
-    #     return Response(data)
+    user = request.user
+    try:
+        people = People.objects.get(people = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    if people.is_people:
+        user = request.user
+        people = People.objects.get(people = user)
+        pinfo = PersonalInfo.objects.get(people = people)
+        serializers = PersonalInfoSerializerGet(pinfo)
+        return Response(serializers.data)
+    else:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+
+
+
+@api_view(['POST'])
+def complaintRegistration(request):
+    user = request.user
+    try:
+        people = People.objects.get(people = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    serializers = ComplaintRegistrationSerializer(data=request.data)
+    if serializers.is_valid():
+        serializers.save(people = people)
+        return Response(serializers.data)
+    else:
+        data = serializers.errors
+        return Response(data)
+

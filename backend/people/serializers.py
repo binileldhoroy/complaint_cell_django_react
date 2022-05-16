@@ -52,3 +52,8 @@ class PersonalInfoSerializerGet(serializers.ModelSerializer):
     class Meta:
         model = PersonalInfo
         fields = '__all__'
+
+class ComplaintRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComplaintRegistration
+        fields = '__all__'
