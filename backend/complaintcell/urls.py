@@ -21,5 +21,6 @@ urlpatterns = [
     path('api/',include('people.urls')),
     path('api/police/',include('police.urls')),
     path('api/lawyer/',include('lawyer.urls')),
+    path('api/dashboard/',include('dashboard.urls')),
 
 ]

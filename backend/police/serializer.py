@@ -25,7 +25,7 @@ class PoliceRegisterSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
-                {"password": "Password fields didn't match."})
+                {"password": "Password fields didn'model = Usert match."})
         if Police.objects.filter(phone=attrs['phone']).exists():
             raise serializers.ValidationError(
                 {"number": "Number already exits."})

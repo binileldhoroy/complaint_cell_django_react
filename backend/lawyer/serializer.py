@@ -1,4 +1,3 @@
-from dataclasses import fields
 from rest_framework import serializers 
 from django.contrib.auth.password_validation import validate_password
 from .models import *
@@ -10,10 +9,11 @@ class LawyerRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, required=True)
     enrollment_number = serializers.CharField(write_only=True, required=True)
     phone=serializers.CharField(write_only=True, required=True)
+    lawyer_image = serializers.ImageField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('first_name','last_name','email','username','password', 'password2','enrollment_number','phone')
+        fields = ('first_name','last_name','email','username','password', 'password2','enrollment_number','phone','lawyer_image')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -35,7 +35,8 @@ class LawyerRegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.save()
-        Lawyer.objects.create(lawyer=user,enrollment_number=validated_data['enrollment_number'],phone=validated_data['phone'])
+        Lawyer.objects.create(lawyer=user,enrollment_number=validated_data['enrollment_number'],
+        phone=validated_data['phone'],lawyer_image=validated_data['lawyer_image'])
 
         return user
 
@@ -46,7 +47,7 @@ class LawyerPersonalInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class LawyerOfficeSerializer(serializers.ModelSerializer):
-    office = LawyerRegisterSerializer()
+    # office = LawyerRegisterSerializer()
     class Meta:
         model = OfficeAddress
         fields = '__all__'

@@ -9,6 +9,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import *
 from .serializers import *
 
+from lawyer.models import Lawyer,LawyerPersonalInfo
+from dashboard.serializers import GetLawyerProfileSerializer
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod                                                                    
@@ -34,6 +37,8 @@ def getRoutes(request):
         'api/personalinfo/',
         'api/profile/',
         'api/newcomplaint/',
+        'api/view-lawyers/',
+        'api/lawyers-details/<str:pk>',
     ]
     return Response(routes)
 
@@ -45,55 +50,110 @@ class RegisterView(generics.CreateAPIView):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def personalView(request):
-    user = request.user
-    try:
-        people = People.objects.get(people = user)
-    except:
-        data = {'You are not allow here login as user'}
-        return Response(data)
-    serializers = PersonalInfoSerializer(data=request.data)
-    if serializers.is_valid():
-        print('success')
-        serializers.save(people = people)
-        return Response(serializers.data)
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        serializers = PersonalInfoSerializer(data=request.data)
+        if serializers.is_valid():
+            print('success')
+            serializers.save(people = people)
+            return Response(serializers.data)
+        else:
+            data = serializers.errors
+            return Response(data)
     else:
-        data = serializers.errors
+        data = 'Your account is blocked by Admin '
         return Response(data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def userProfile(request):
-    user = request.user
-    try:
-        people = People.objects.get(people = user)
-    except:
-        data = {'You are not allow here login as user'}
-        return Response(data)
-    if people.is_people:
+    if request.user.is_active:
         user = request.user
-        people = People.objects.get(people = user)
-        pinfo = PersonalInfo.objects.get(people = people)
-        serializers = PersonalInfoSerializerGet(pinfo)
-        return Response(serializers.data)
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        if people.is_people:
+            user = request.user
+            people = People.objects.get(people = user)
+            pinfo = PersonalInfo.objects.get(people = people)
+            serializers = PersonalInfoSerializerGet(pinfo)
+            return Response(serializers.data)
+        else:
+            data = {'You are not allow here login as user'}
+            return Response(data)
     else:
-        data = {'You are not allow here login as user'}
+        data = 'Your account is blocked by Admin '
         return Response(data)
-
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def complaintRegistration(request):
-    user = request.user
-    try:
-        people = People.objects.get(people = user)
-    except:
-        data = {'You are not allow here login as user'}
-        return Response(data)
-    serializers = ComplaintRegistrationSerializer(data=request.data)
-    if serializers.is_valid():
-        serializers.save(people = people)
-        return Response(serializers.data)
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        serializers = ComplaintRegistrationSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save(people = people)
+            return Response(serializers.data)
+        else:
+            data = serializers.errors
+            return Response(data)
     else:
-        data = serializers.errors
+        data = 'Your account is blocked by Admin '
         return Response(data)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def viewLawyers(request):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        pinfo = PersonalInfo.objects.get(people = people)
+        dist = pinfo.police_district
+        lawyers = Lawyer.objects.filter(is_hire = True)
+        dict_lawyers = lawyers.filter(officeaddress__office_city__contains = dist)
+        non_dict_lawyers = lawyers.exclude(officeaddress__office_city__contains = dist)
+        # l = dict_lawyers + non_dict_lawyers
+        lawyer_list1 = LawyerListSerializer(dict_lawyers,many=True)
+        lawyer_list = LawyerListSerializer(non_dict_lawyers,many=True)
+        return Response({"on_district":lawyer_list1.data,"non_district":lawyer_list.data})
+    else:
+        data = 'Your account is blocked by Admin '
+        return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def viewLawyerDetails(request,pk):
+    if request.user.is_active:
+        user = User.objects.get(id = pk)
+        lawyer = Lawyer.objects.get(lawyer = user)
+        try:
+            pinfo = LawyerPersonalInfo.objects.get(lawyer_id = lawyer)
+        except:
+            data = {'status':'Lawyer didnt complete the profile'}
+            return Response(data)
+        serializers = GetLawyerProfileSerializer(pinfo)
+        return Response(serializers.data)
+    else:
+        data = {'status':'You are not allowed here'}
+        return Response(data)

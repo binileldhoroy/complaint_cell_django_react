@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
-from .utils import generateRefCode
+from .utils import generateRefCode,path_and_rename
 
 class People(models.Model):
     people = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
@@ -55,6 +55,7 @@ class PersonalInfo(models.Model):
     state = models.CharField(max_length=100,null=True)
     police_district = models.CharField(max_length=100,null=True)
     police_station = models.CharField(max_length=100,null=True)
+    user_image = models.ImageField(upload_to=path_and_rename,null=True)
 
 
 compalaint_type = [
@@ -87,7 +88,7 @@ class ComplaintRegistration(models.Model):
     police_place = models.CharField(max_length=150,null=True)
     incident_date = models.DateTimeField(null=True)
     file_discription = models.CharField(max_length=150,null=True)
-    file_upload = models.FileField(upload_to='media',null=True)
+    file_upload = models.FileField(upload_to=path_and_rename,null=True)
     compalaint_description = models.TextField(null=True)
     complaint_status = models.CharField(max_length=150,choices=comp_status_type,null=True,default='Registred')
     case_status  = models.CharField(max_length=150,choices=case_status,null=True)
@@ -102,3 +103,6 @@ class ComplaintRegistration(models.Model):
             ref_number = generateRefCode()
             self.ref_number = ref_number
         super().save(*args, **kwargs)
+
+
+

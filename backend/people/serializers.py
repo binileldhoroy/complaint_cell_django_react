@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from people.models import *
 
+from lawyer.models import *
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -57,3 +59,15 @@ class ComplaintRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComplaintRegistration
         fields = '__all__'
+
+
+class LawyerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','first_name','last_name','email')
+
+class LawyerListSerializer(serializers.ModelSerializer):
+    lawyer = LawyerListSerializer()
+    class Meta:
+        model = Lawyer
+        fields = ('lawyer','phone','enrollment_number','lawyer_image')

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'people',
     'police',
     'lawyer',
+    'dashboard',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",

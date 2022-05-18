@@ -14,6 +14,6 @@ urlpatterns = [
     path('personalinfo/',views.personalView),
     path('profile/',views.userProfile),
     path('newcomplaint/',views.complaintRegistration),
-
-
+    path('view-lawyers/',views.viewLawyers),
+    path('lawyers-details/<str:pk>',views.viewLawyerDetails),
 ]
