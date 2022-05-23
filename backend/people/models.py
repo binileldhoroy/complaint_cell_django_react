@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 from .utils import generateRefCode,path_and_rename
+from lawyer.models import Lawyer
 
 class People(models.Model):
     people = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
@@ -97,12 +98,19 @@ class ComplaintRegistration(models.Model):
     def __str__(self):
         return self.complaint_nature
 
-    
     def save(self, *args, **kwargs):
-        if self.ref_number == '' and self.ref_number == None:
-            ref_number = generateRefCode()
-            self.ref_number = ref_number
+        if self.ref_number == '' or self.ref_number == None:
+            number = generateRefCode()
+            self.ref_number = number
+            print(number)
         super().save(*args, **kwargs)
 
+
+
+class AssignedComplaints(models.Model):
+    people = models.ForeignKey(People,on_delete=models.CASCADE,null=True)
+    lawyer = models.ForeignKey(Lawyer, on_delete=models.CASCADE,null=True)
+    complaint = models.ForeignKey(ComplaintRegistration,on_delete=models.CASCADE,null=True)
+    is_accept = models.BooleanField(default=False)
 
 

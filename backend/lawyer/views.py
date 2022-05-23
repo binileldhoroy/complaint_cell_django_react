@@ -81,3 +81,17 @@ def lawyerProfile(request):
     else:
         data = {'Your request is pending at admin'}
         return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def assignedComplaints(request):
+    user = request.user
+    try:
+        lawyer = Lawyer.objects.get(lawyer = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    complaints = AssignedComplaints.objects.filter(lawyer = lawyer)
+    serializer = LawyerAssignedComplaints(complaints,many=True)
+    return Response(serializer.data)

@@ -16,4 +16,6 @@ urlpatterns = [
     path('newcomplaint/',views.complaintRegistration),
     path('view-lawyers/',views.viewLawyers),
     path('lawyers-details/<str:pk>',views.viewLawyerDetails),
+    path('accepted-complaints/',views.acceptComplaintUser),
+    path('forwardto-lawyer/',views.forwardToLawyer),
 ]

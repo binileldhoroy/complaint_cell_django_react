@@ -1,5 +1,6 @@
 from uuid import uuid4
 import os
+from django.utils.deconstruct import deconstructible
 
 
 def generateRefCode():
@@ -7,7 +8,6 @@ def generateRefCode():
     return str(code)[:12]
 
 
-from django.utils.deconstruct import deconstructible
 
 @deconstructible
 class PathAndRename(object):

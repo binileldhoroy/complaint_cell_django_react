@@ -39,6 +39,7 @@ def getRoutes(request):
         'api/newcomplaint/',
         'api/view-lawyers/',
         'api/lawyers-details/<str:pk>',
+        'api/accepted-complaints/',
     ]
     return Response(routes)
 
@@ -157,3 +158,42 @@ def viewLawyerDetails(request,pk):
     else:
         data = {'status':'You are not allowed here'}
         return Response(data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def acceptComplaintUser(request):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        complaint = ComplaintRegistration.objects.filter(people = people, case_status = 'FIR Registred')
+        serializer = ComplaintRegistrationSerializer(complaint,many=True)
+        return Response(serializer.data)
+    else:
+        data = 'Your account is blocked by Admin '
+        return Response(data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def forwardToLawyer(request):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        serializer = AssignedComplaintsSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save(people = people)
+            return Response(serializer.data)
+        else:
+            data = serializer.errors
+            return Response(data)
+    else:
+        data = 'Your account is blocked by Admin '
+        return Response(data)       

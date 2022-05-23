@@ -8,6 +8,5 @@ urlpatterns = [
     path('lawyer-personalinfo/',views.lawyerPersonalView),
     path('add-office/',views.lawyerOfficeView),
     path('lawyer-profile/',views.lawyerProfile),
-
-
+    path('requested-complaints/',views.assignedComplaints),
 ]

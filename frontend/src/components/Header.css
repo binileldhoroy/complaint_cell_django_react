@@ -1,0 +1,15 @@
+.nav-bg{
+    background-color: #0f2755;
+}
+
+p {
+    color: #fff8d9;
+}
+
+.create-btn{
+    color: #fff8d9;
+}
+
+.create-btn:hover{
+    background-color: #95989e !important;
+}

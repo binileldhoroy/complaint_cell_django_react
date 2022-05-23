@@ -71,3 +71,10 @@ class LawyerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lawyer
         fields = ('lawyer','phone','enrollment_number','lawyer_image')
+
+
+class AssignedComplaintsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssignedComplaints
+        fields = '__all__'
+
