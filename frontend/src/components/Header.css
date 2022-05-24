@@ -13,3 +13,7 @@ p {
 .create-btn:hover{
     background-color: #95989e !important;
 }
+
+#logo{
+    cursor: pointer;
+}

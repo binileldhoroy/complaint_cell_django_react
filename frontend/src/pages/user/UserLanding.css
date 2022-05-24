@@ -1,0 +1,24 @@
+.home-img{
+    padding: 10px;
+    background: cover !important;
+}
+
+.card_img{
+    width:20vh;
+    height:20vh;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+.home_card{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    border-radius: 15px !important;
+    box-shadow: 0px 0px 10px 1px grey !important;
+}
+
+.home-btn{
+    border-radius: 15px !important;
+}
