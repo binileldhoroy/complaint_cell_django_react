@@ -1,43 +1,41 @@
-import React, {useContext} from 'react'
-import './UserSignUp.css'
+import React from 'react'
+import PoliceHeader from '../../components/police/PoliceHeader'
 import {Col,Row} from 'react-bootstrap'
-import Header from '../../components/Header';
-import {AuthContext} from '../../context/UserContext'
+import '../user/UserSignUp.css'
+import policebg from '../../static/images/policebg.jpg'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import bg1 from '../../static/images/bg1.jpg'
-
 
 
 const schema = yup.object().shape({
-  firstname: yup.string().required('This field is required!'),
-  lastname: yup.string().required('This field is required!'),
-  username: yup.string().min(3, "Username should contain 3 characters").required("Userame is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup.string().min(10,'Phone number is not valid').max(10,'Phone number is not valid'),
-  password: yup.string().min(8, "Password should contain 8 characters").required("Password is required"),
-  repassword: yup.string().oneOf([yup.ref("password"), null]),
-});
+    officer: yup.string().required('This field is required!'),
+    position: yup.string().required('This field is required!'),
+    district: yup.string().required('This field is required!'),
+    place: yup.string().required('This field is required!'),
+    username: yup.string().min(3, "Username should contain 3 characters").required("Userame is required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    phone: yup.string().min(10,'Phone number is not valid').max(10,'Phone number is not valid'),
+    password: yup.string().min(8, "Password should contain 8 characters").required("Password is required"),
+    repassword: yup.string().oneOf([yup.ref("password"), null]),
+  });
 
+const PoliceSignUp = () => {
 
-const UserSignUp = () => {
-
-  const {signUpUser, errorMsg, signUpError} = useContext(AuthContext)
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema),
-  })
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+      })
 
   return (
     <>
     <style>
-      {`body {background:url(${bg1})}`}
+      {`body {background:url(${policebg})}`}
     </style>
-    <div  >
-     <Header/>
+      
+    <div>
+        <PoliceHeader/>
 
-
-<section >
+        <section style={{color: 'white'}}>
   <div className="mask d-flex align-items-center h-100 gradient-custom-3" >
     <div className="container " >
       <div className="row d-flex justify-content-center align-items-center h-100" >
@@ -46,20 +44,20 @@ const UserSignUp = () => {
             <div className="card-body" >
               <h2 className="text-uppercase text-center mb-5">Create an account</h2>
 
-              <form id='form' onSubmit={handleSubmit(signUpUser)}>
+              <form id='form' >
               <Row  className='p-3 m-0'>
               <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="text" {...register('firstname')} className="form-control form-control-lg" name='firstname' />
-                  <label className="form-label" >First Name</label>
-                  <p style={{color:'red'}} >{errors.firstname?.message}</p>
+                  <input type="text" {...register('officer')} className="form-control form-control-lg" name='officer' />
+                  <label className="form-label" >Officer Incharge</label>
+                  <p style={{color:'red'}} >{errors.officer?.message}</p>
                 </div>
             </Col>
             <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="text" {...register('lastname')} className="form-control form-control-lg" name='lastname' />
-                  <label className="form-label" >Last Name</label>
-                  <p style={{color:'red'}} >{errors.lastname?.message}</p>
+                  <input type="text" {...register('position')} className="form-control form-control-lg" name='position' />
+                  <label className="form-label" >Officer Position</label>
+                  <p style={{color:'red'}} >{errors.position?.message}</p>
                 </div>
             </Col>
             
@@ -67,7 +65,7 @@ const UserSignUp = () => {
                 <div className="form-outline ">
                   <input type="text" {...register('username')} className="form-control form-control-lg" name='username' />
                   <label className="form-label" >Username</label>
-                  <p style={{color:'red'}}>{errors.username?.message}{errorMsg}{signUpError.username}</p>
+                  <p style={{color:'red'}}>{errors.username?.message}</p>
                 </div>
             </Col>
 
@@ -87,11 +85,27 @@ const UserSignUp = () => {
                 </div>
             </Col>
 
+            <Col md={6} className='px-3 '>
+                <div className="form-outline ">
+                  <input type="text" {...register('district')} className="form-control form-control-lg" name='district' />
+                  <label className="form-label" >District</label>
+                  <p style={{color:'red'}}>{errors.district?.message}</p>
+                </div>
+            </Col>
+
+            <Col md={6} className='px-3 '>
+                <div className="form-outline ">
+                  <input type="text" {...register('place')} className="form-control form-control-lg" name='place' />
+                  <label className="form-label" >Place</label>
+                  <p style={{color:'red'}}>{errors.place?.message}</p>
+                </div>
+            </Col>
+
                 <Col md={6} className='px-3 '>
                 <div className="form-outline ">
                   <input type="password" {...register('password')} id="form3Example4cg" className="form-control form-control-lg" name='password' />
                   <label className="form-label" >Password</label>
-                  <p style={{color:'red'}}>{errors.password?.message}{signUpError.password}</p>
+                  <p style={{color:'red'}}>{errors.password?.message}</p>
                 </div>
             </Col>
 
@@ -117,10 +131,9 @@ const UserSignUp = () => {
     </div>
   </div>
 </section>
-
     </div>
     </>
   )
 }
 
-export default UserSignUp
+export default PoliceSignUp

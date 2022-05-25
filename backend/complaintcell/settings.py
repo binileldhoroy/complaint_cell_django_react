@@ -189,4 +189,4 @@ AWS_SECRET_ACCESS_KEY = 'aNxFxB+0pEwTwjmFMJ96BolySknzPFulmVnx+ZBi'
 AWS_STORAGE_BUCKET_NAME = 'binil-complaintcell-bucket'
 
 
-
+CORS_ALLOW_ALL_ORIGINS = True

@@ -12,6 +12,8 @@ from .serializers import *
 from lawyer.models import Lawyer,LawyerPersonalInfo
 from dashboard.serializers import GetLawyerProfileSerializer
 
+from police.models import Police
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod                                                                    
@@ -20,6 +22,28 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
+        try:
+            people = People.objects.get(people = user)
+            userType = 'is_user'
+        except:
+            userType = None
+
+        if userType == None:
+            try:
+                people = Lawyer.objects.get(lawyer = user)
+                userType = 'is_lawyer'
+            except:
+                userType = None
+
+        if userType == None:
+            try:
+                people = Police.objects.get(police = user)
+                userType = 'is_police'
+            except:
+                userType = None
+
+
+        token['type'] = userType
         # ...
 
         return token

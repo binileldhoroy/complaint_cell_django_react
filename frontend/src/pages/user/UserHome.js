@@ -1,9 +1,13 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import './UserHome.css'
 import {Carousel, Card, Col,Row} from 'react-bootstrap'
+import { AuthContext } from '../../context/UserContext'
+
+import { useNavigate } from 'react-router-dom'
 
 import bn1 from '../../static/images/bn1.jpg'
 import bn2 from '../../static/images/bn2.jpg'
+import bn3 from '../../static/images/bn3.jpg'
 import card1 from '../../static/images/card1.jpeg'
 import card2 from '../../static/images/card2.png'
 import card3 from '../../static/images/card3.png'
@@ -12,18 +16,23 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 
 function UserHome() {
+
+  const {user} = useContext(AuthContext)
+  const navagat = useNavigate()
+
   return (
     <div style={{background:`url(${bg1})`}}>
         
   
   <Header/>
       {/* carousel  */}
-
+ 
+<div>
   <Carousel className="carousel-img" >
   <Carousel.Item interval={5000}>
     <img
       className="d-block w-100"
-      src="https://www.bis.gov.in/wp-content/uploads/2018/11/online-complaint-1.jpg"
+      src={bn3}
       alt="First slide"
     />
     <Carousel.Caption>
@@ -104,6 +113,7 @@ We are here to serve you</p>
   </Col>
 
 </Row>
+</div>
 
 <Footer/>
 
