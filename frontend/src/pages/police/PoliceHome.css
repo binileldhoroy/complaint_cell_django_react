@@ -1,0 +1,28 @@
+.policehome-img{
+    padding: 3px;
+    margin-top: 44px;
+    height: 35vh;
+    width: 38vh;
+    background: cover !important;
+}
+
+.policecard_img{
+    width:37vh;
+    height:25vh;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+.policehome_card{
+    height: 67vh;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    border-radius: 15px !important;
+    box-shadow: 0px 0px 10px 1px grey !important;
+}
+
+.policehome-btn{
+    border-radius: 15px !important;
+}

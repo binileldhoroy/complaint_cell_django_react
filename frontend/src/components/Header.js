@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { AiOutlineLogin, AiOutlineUserAdd } from "react-icons/ai";
 import Button from '@mui/material/Button';
 import { AuthContext } from '../context/UserContext'
+import logo from '../static/images/logo.png'
+
 
 function Header() {
 
@@ -16,11 +18,11 @@ function Header() {
     <div id="logo">
       {
         user ? <Link to="/home">
-            Complaint Cell
+            <img className="logo_img img-fluid" src={logo} alt="" srcset="" />
         </Link> :
       
     (<Link to="/">
-      Complaint Cell
+      <img className="logo_img img-fluid" src={logo} alt="" srcset="" />
       </Link>)
 }
     </div>

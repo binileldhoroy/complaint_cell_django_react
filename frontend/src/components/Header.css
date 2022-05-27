@@ -14,6 +14,12 @@ p {
     background-color: #95989e !important;
 }
 
-#logo{
-    cursor: pointer;
+.home_logo{
+    cursor: pointer !important;
+   
+}
+
+.logo_img{
+    max-width: 40%;
+    height: auto;
 }
