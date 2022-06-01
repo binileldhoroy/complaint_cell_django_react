@@ -42,6 +42,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             except:
                 userType = None
 
+        if userType == None and user.is_superuser:
+            userType = 'is_superuser'
+
 
         token['type'] = userType
         # ...

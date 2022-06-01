@@ -20,6 +20,8 @@ def getRouter(request):
         'api/dashboard/block-user/<str:pk>',
         'api/dashboard/lawyer-details/',
         'api/dashboard/lawyer-info/<str:pk>',
+        'api/dashboard/hire-lawyer/<str:pk>',
+        'api/dashboard/hired-lawyers/',
     ]
     return Response(routes)
 
@@ -67,6 +69,17 @@ def getLawyers(request):
         return Response(data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getHiredLawyers(request):
+    if request.user.is_superuser:
+        lawyer = Lawyer.objects.filter(is_hire=True)
+        serializer = GetLawyerSerializer(lawyer,many=True)
+        return Response(serializer.data)
+    else:
+        data = {'status':'You are not allowed here'}
+        return Response(data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -77,7 +90,7 @@ def viewLawyer(request,pk):
         try:
             pinfo = LawyerPersonalInfo.objects.get(lawyer_id = lawyer)
         except:
-            data = {'status':'Lawyer didnt complete the profile'}
+            data = {'status':'incomplete'}
             return Response(data)
         serializers = GetLawyerProfileSerializer(pinfo)
         return Response(serializers.data)
@@ -90,10 +103,25 @@ def viewLawyer(request,pk):
 @permission_classes([IsAuthenticated])
 def hairLawyer(request,pk):
     if request.user.is_superuser:
-        user = User.objects.filter(id = pk)
+        user = User.objects.get(id = pk)
+        print(user)
         lawyer = Lawyer.objects.filter(lawyer = user).update(is_hire = True)
+        print(lawyer)
         data = {'status':'Lawyer is hired'}
         return Response(data)
+    else:
+        data = {'status':'You are not allowed here'}
+        return Response(data)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPoliceStation(request):
+    if request.user.is_superuser:
+        police = Police.objects.all()
+        serializer = GetPoliceInfoSerializer(police,many=True)
+        return Response(serializer.data)
     else:
         data = {'status':'You are not allowed here'}
         return Response(data)

@@ -4,6 +4,7 @@ from .models import *
 
 from people.models import People
 from lawyer.models import Lawyer,LawyerPersonalInfo
+from police.models import Police
 
 
 class GetRegistredUserSerializer(serializers.ModelSerializer):
@@ -29,4 +30,12 @@ class GetLawyerProfileSerializer(serializers.ModelSerializer):
     lawyer_id = GetLawyerSerializer()
     class Meta:
         model = LawyerPersonalInfo
+        fields = '__all__'
+
+
+
+class GetPoliceInfoSerializer(serializers.ModelSerializer):
+    police = GetRegistredUserSerializer()
+    class Meta:
+        model = Police
         fields = '__all__'

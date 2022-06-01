@@ -1,10 +1,10 @@
 import React, {useContext} from 'react'
 import './UserLogin.css'
 import Header from '../../components/Header'
-import {AuthContext} from '../../context/UserContext'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { LoginContext } from '../../context/LoginContext'
 
 
 
@@ -16,7 +16,7 @@ const schema =  yup.object().shape({
 
 const UserLogin = () => {
 
-  const {loginUser,errorMsg} = useContext(AuthContext)
+  const {loginUser,errorMsg} = useContext(LoginContext)
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   })

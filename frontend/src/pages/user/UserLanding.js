@@ -14,7 +14,7 @@ const UserLanding = () => {
   return (
     <div>
         <Header/>
-<div className="">
+<div className="container">
     <Row className="d-flex justify-content-center">
       <Col sm={6} md={5} lg={4} className='p-3 d-flex justify-content-center'>
         <Card className="home_card" style={{ width: '18rem' }}>

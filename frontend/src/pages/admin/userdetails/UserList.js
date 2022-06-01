@@ -1,36 +1,45 @@
-import React from 'react'
-import {Table} from 'react-bootstrap'
+import React,  { useContext, useEffect } from 'react'
+import {Table,Button} from 'react-bootstrap'
+import { AdminContext } from '../../../context/AdminContext'
 
 const UserList = () => {
+
+  const {getUsers,users,blockUser,unblockUser} = useContext(AdminContext)
+  useEffect(() => {
+    getUsers()
+} , [])
+
   return (
     <div>
         <Table striped bordered hover>
   <thead>
     <tr>
-      <th>#</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Username</th>
+      <th>Email</th>
+      <th>Phone</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>1</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+    {users && users.map((user,index) => {
+      return(
+      <tr key={index}>
+      <td>{user.people.first_name}</td>
+      <td>{user.people.last_name}</td>
+      <td>@{user.people.username}</td>
+      <td>{user.people.email}</td>
+      <td>{user.phone}</td>
+      <td>
+        {user.people.is_active  ? (
+          <Button variant='outline-danger'   value={user.people.id} onClick={blockUser} className='w-100' >Block</Button>
+        ):(
+          <Button variant='outline-success'  value={user.people.id} onClick={unblockUser} className='w-100' >Unblock</Button>
+        )}
+      </td>
     </tr>
-    <tr>
-      <td>2</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td colSpan={2}>Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
+    )})}
+    
   </tbody>
 </Table>
     </div>

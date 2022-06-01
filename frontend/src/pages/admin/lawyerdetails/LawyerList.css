@@ -1,0 +1,20 @@
+.lawyer_list{
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+
+.lawyer_view{
+    width: 34px;
+    height: 30px;
+    color: blue;
+}
+
+.view_btn{
+    background-color: transparent;
+    border: none;
+}
+
+.view_btn:hover{
+    background-color: transparent;
+
+}

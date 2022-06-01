@@ -21,27 +21,6 @@ export const AuthProvider = ({children}) => {
     const baseUrl = 'http://127.0.0.1:8000/api/'
     // ueserLogin
 
-    const loginUser = async (e) => {
-        await axios.post(`${baseUrl}token/`,{
-            'username':e.username,
-            'password': e.password
-        }).then(res => {
-            console.log(res.data);
-            setAuthTokens(res.data);
-            setUser(jwt_decode(res.data.access))
-            const userType = (jwt_decode(res.data.access).type)
-            if (userType === 'is_user'){
-                localStorage.setItem('authTokens',JSON.stringify(res.data))
-                navagat('/home')
-            }else{
-                alert('Wrong user type')
-            }
-        }).catch(err => {
-            console.log(err.response.data.detail);
-            setErrorMsg(err.response.data.detail)
-        })
-    } 
-
 
     const signUpUser = async (e) => {
         await axios.post(`${baseUrl}signup/`,{
@@ -57,11 +36,12 @@ export const AuthProvider = ({children}) => {
         }).catch(err => {
             setSignUpError(err.response.data);
         })
+
     }
 
     const contextData = {
-        loginUser,
-        user,
+        // loginUser,
+        // user,
         errorMsg,
         signUpUser,
         signUpError,

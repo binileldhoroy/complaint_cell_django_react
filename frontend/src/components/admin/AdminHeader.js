@@ -1,8 +1,12 @@
-import React from "react";
-import {Nav,Navbar,NavDropdown,Container} from 'react-bootstrap'
+import React, { useContext } from "react";
+import {Nav,Navbar,NavDropdown,Container,Button} from 'react-bootstrap'
+import { LoginContext } from "../../context/LoginContext";
 
 
 const AdminHeader = () => {
+
+  const {logoutUser} = useContext(LoginContext)
+
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -28,9 +32,8 @@ const AdminHeader = () => {
               </NavDropdown>
             </Nav>
             <Nav>
-              <Nav.Link href="#deets">More deets</Nav.Link>
-              <Nav.Link eventKey={2} href="#memes">
-                Dank memes
+              <Nav.Link eventKey={2}>
+              <Button variant="outline-danger"  onClick={logoutUser}>Logout</Button>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

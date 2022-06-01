@@ -23,3 +23,17 @@ p {
     max-width: 40%;
     height: auto;
 }
+
+.drop_down{
+    background-color: #0f2755 !important;
+    border: 2px solid #fff8d9 !important;
+}
+
+.dropdown-menu{
+    z-index: 3000 !important;
+
+}
+
+.li_menu{
+    overflow: visible !important;
+}

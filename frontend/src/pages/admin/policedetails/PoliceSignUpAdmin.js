@@ -1,11 +1,9 @@
-import React from 'react'
-import PoliceHeader from '../../components/police/PoliceHeader'
+import React, {useContext} from 'react'
 import {Col,Row} from 'react-bootstrap'
-import '../user/UserSignUp.css'
-import policebg from '../../static/images/policebg.jpg'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { AdminContext } from '../../../context/AdminContext'
 
 
 const schema = yup.object().shape({
@@ -20,32 +18,29 @@ const schema = yup.object().shape({
     repassword: yup.string().oneOf([yup.ref("password"), null]),
   });
 
-const PoliceSignUp = () => {
+const PoliceSignUpAdmin = () => {
 
+    const {signUpPolice, errorMsg, signUpError} = useContext(AdminContext)
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       })
 
   return (
-    <>
-    <style>
-      {`body {background:url(${policebg})}`}
-    </style>
-      
+    <>   
     <div>
-        <PoliceHeader/>
-
-        <section style={{color: 'white'}}>
+        <section>
   <div className="mask d-flex align-items-center h-100 gradient-custom-3" >
     <div className="container " >
       <div className="row d-flex justify-content-center align-items-center h-100" >
-        <div className="col-12 col-md-9 col-lg-7" >
+        <div className="col-12 col-md-9 col-lg-12" >
           <div className="card-content" >
             <div className="card-body" >
               <h2 className="text-uppercase text-center mb-5">Create an account</h2>
 
-              <form id='form' >
-              <Row  className='p-3 m-0'>
+              <form 
+               onSubmit={handleSubmit(signUpPolice)}
+               >
+              <Row  className=' m-0'>
               <Col md={6} className='px-3 '>
                 <div className="form-outline ">
                   <input type="text" {...register('officer')} className="form-control form-control-lg" name='officer' />
@@ -71,7 +66,7 @@ const PoliceSignUp = () => {
 
             <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="Email" {...register('email')} id="form3Example3cg" className="form-control form-control-lg" name='email' />
+                  <input type="Email" {...register('email')} id="form3Example3cg4" className="form-control form-control-lg" name='email' />
                   <label className="form-label" >Email</label>
                   <p style={{color:'red'}}>{errors.email?.message}</p>
                 </div>
@@ -79,7 +74,7 @@ const PoliceSignUp = () => {
 
             <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="text" {...register('phone')} id="form3Example3cg" className="form-control form-control-lg" name='phone' />
+                  <input type="text" {...register('phone')} id="form3Example3cg1" className="form-control form-control-lg" name='phone' />
                   <label className="form-label" >Phone Number</label>
                   <p style={{color:'red'}}>{errors.phone?.message}</p>
                 </div>
@@ -103,7 +98,7 @@ const PoliceSignUp = () => {
 
                 <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="password" {...register('password')} id="form3Example4cg" className="form-control form-control-lg" name='password' />
+                  <input type="password" {...register('password')} id="form3Example4cg3" className="form-control form-control-lg" name='password' />
                   <label className="form-label" >Password</label>
                   <p style={{color:'red'}}>{errors.password?.message}</p>
                 </div>
@@ -111,7 +106,7 @@ const PoliceSignUp = () => {
 
                 <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="password" {...register('repassword')} id="form3Example4cdg" className="form-control form-control-lg" name='repassword' />
+                  <input type="password" {...register('repassword')} id="form3Example4cdg2" className="form-control form-control-lg" name='repassword' />
                   <label className="form-label" >Repeat your password</label>
                   <p style={{color:'red'}}>{errors.repassword && 'Password should Match!'}</p>
                 </div>
@@ -136,4 +131,4 @@ const PoliceSignUp = () => {
   )
 }
 
-export default PoliceSignUp
+export default PoliceSignUpAdmin

@@ -35,8 +35,22 @@ const AdminHome = ({children}) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <br />
+                  <Link to="/dashboard/active-lawyers">
+                    <GoLaw /> Hired Lawyers
+                  </Link>
+                  <br />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <br />
                   <Link to="/dashboard/police-list">
                     <GiPoliceOfficerHead /> Police Manage
+                  </Link>
+                  <br />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <br />
+                  <Link to="/dashboard/police-signup">
+                    <GiPoliceOfficerHead /> Police SignUp
                   </Link>
                   <br />
                 </ListGroup.Item>
