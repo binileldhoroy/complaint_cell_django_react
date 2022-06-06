@@ -90,7 +90,7 @@ def personalView(request):
         serializers = PersonalInfoSerializer(data=request.data)
         if serializers.is_valid():
             print('success')
-            serializers.save(people = people)
+            serializers.save(people = people,pinfo_complete=True)
             return Response(serializers.data)
         else:
             data = serializers.errors
@@ -109,15 +109,30 @@ def userProfile(request):
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        if people.is_people:
-            user = request.user
-            people = People.objects.get(people = user)
-            pinfo = PersonalInfo.objects.get(people = people)
-            serializers = PersonalInfoSerializerGet(pinfo)
-            return Response(serializers.data)
+
+        # try:
+        profile_complete = PersonalInfo.objects.filter(people = people)
+        # except:
+        #     profile_complete = {'pinfo_complete' : False}
+        #     # profile_complete.pinfo_complete = False
+        if len(profile_complete) == 0:
+            profile_get = False
         else:
-            data = {'You are not allow here login as user'}
-            return Response(data)
+            profile_get = True
+
+        if profile_get:
+            if people.is_people:
+                user = request.user
+                people = People.objects.get(people = user)
+                pinfo = PersonalInfo.objects.get(people = people)
+                serializers = PersonalInfoSerializerGet(pinfo)
+                return Response(serializers.data)
+            else:
+                data = {'You are not allow here login as user'}
+                return Response(data)
+        else:
+            serializer = PeopleInfoGet(people)
+            return Response(serializer.data)
     else:
         data = 'Your account is blocked by Admin '
         return Response(data)
@@ -133,15 +148,20 @@ def complaintRegistration(request):
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        serializers = ComplaintRegistrationSerializer(data=request.data)
-        if serializers.is_valid():
-            serializers.save(people = people)
-            return Response(serializers.data)
+        profile_complete = PersonalInfo.objects.get(people = people)
+        if profile_complete.pinfo_complete:
+            serializers = ComplaintRegistrationSerializer(data=request.data)
+            if serializers.is_valid():
+                serializers.save(people = people)
+                return Response(serializers.data)
+            else:
+                data = serializers.errors
+                return Response(data)
         else:
-            data = serializers.errors
+            data = {'profile not completed'}
             return Response(data)
     else:
-        data = 'Your account is blocked by Admin '
+        data = {'Your account is blocked by Admin '}
         return Response(data)
 
 
@@ -224,3 +244,4 @@ def forwardToLawyer(request):
     else:
         data = 'Your account is blocked by Admin '
         return Response(data)       
+

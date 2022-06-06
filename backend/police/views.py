@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
 
-from people.models import People,ComplaintRegistration
+from people.models import People,ComplaintRegistration, PersonalInfo
+from people.serializers import PersonalInfoSerializerGet
 
 
 from .models import *
@@ -43,9 +44,25 @@ def getComplaint(request):
         data = {'You are not allow here login as user'}
         return Response(data)
     station = police.ps_place
-    complaints = ComplaintRegistration.objects.filter(police_place = station)
+    complaints = ComplaintRegistration.objects.filter(police_place = station,complaint_status='Registred')
     serializer = GetComplaints(complaints,many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def viewComplaint(request,pk):
+    user = request.user
+    try:
+        police = Police.objects.get(police = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    complaints = ComplaintRegistration.objects.get(id = pk)
+    pinfo = PersonalInfo.objects.get(id = complaints.people.id)
+    personal_info = PersonalInfoSerializerGet(pinfo)
+    serializer = GetComplaints(complaints)
+    return Response({"complaint":serializer.data,"personalinfo":personal_info.data})
 
 
 @api_view(['GET'])
@@ -105,9 +122,9 @@ def fileFIRComplaint(request,pk):
         data = {'You are not allow here login as user'}
         return Response(data)
     complaints = ComplaintRegistration.objects.filter(id = pk)
-    complaints.update(complaint_status='Opened',case_status = 'FIR Registred')
+    complaints.update(complaint_status='Closed',case_status = 'FIR Registred')
     serializer = GetComplaints(complaints)
-    data = 'Complaint Disposed'
+    data = {'Complaint Disposed'}
     return Response(data)
 
 

@@ -57,6 +57,7 @@ class PersonalInfo(models.Model):
     police_district = models.CharField(max_length=100,null=True)
     police_station = models.CharField(max_length=100,null=True)
     user_image = models.ImageField(upload_to=path_and_rename,null=True)
+    pinfo_complete = models.BooleanField(default=False)
 
 
 compalaint_type = [
@@ -112,5 +113,3 @@ class AssignedComplaints(models.Model):
     lawyer = models.ForeignKey(Lawyer, on_delete=models.CASCADE,null=True)
     complaint = models.ForeignKey(ComplaintRegistration,on_delete=models.CASCADE,null=True)
     is_accept = models.BooleanField(default=False)
-
-

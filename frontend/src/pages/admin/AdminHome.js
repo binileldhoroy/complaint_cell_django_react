@@ -36,7 +36,7 @@ const AdminHome = ({children}) => {
                 <ListGroup.Item>
                   <br />
                   <Link to="/dashboard/active-lawyers">
-                    <GoLaw /> Hired Lawyers
+                    <GoLaw /> Active Lawyers
                   </Link>
                   <br />
                 </ListGroup.Item>

@@ -7,21 +7,16 @@ import logo from "../../static/images/logo.png";
 import { LoginContext } from "../../context/LoginContext";
 
 const PoliceHeader = () => {
-  const {user} = useContext(LoginContext)
+  const {user,logoutUser} = useContext(LoginContext)
   return (
     <div>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <section className="top-nav">
         <div classsName="home_logo">
-          {/* {
-        user ? <Link to="/home">
-            Complaint Cell
-        </Link> :
-      
-    (<Link to="/"> */}
+        
+    <Link to="/police/home">
           <img className="logo_img img-fluid" src={logo} alt="" srcSet="" />
-          {/* </Link>)
-} */}
+          </Link>
         </div>
         <input id="menu-toggle" type="checkbox" />
         <label className="menu-button-container" htmlFor="menu-toggle">
@@ -31,7 +26,9 @@ const PoliceHeader = () => {
         <ul className="menu">
           <li>
             <div className="create-account m-2 d-flex flex-column">
-              <p className="text-center mb-0"></p>
+              <p className="text-center mt-4 text-capitalize">
+                {user.username}
+              </p>
             </div>
           </li>
           <li>
@@ -40,13 +37,7 @@ const PoliceHeader = () => {
                 <BiLogOutCircle />
               </p>
               {/* <Link to="/login"> */}
-              <Button
-                className="create-btn"
-                size="medium"
-                style={{ color: "white" }}
-              >
-                LogOut
-              </Button>
+              <Button variant="outline-danger"  onClick={logoutUser}>Logout</Button>
               {/* </Link> */}
             </div>
           </li>

@@ -37,7 +37,7 @@ const LawyerList = () => {
     {lawyers && lawyers.map((lawyer,index) => {
       return(
       <tr key={index}>
-      <td><Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /></td>
+      <td><Avatar alt="Remy Sharp" src={lawyer && lawyer.lawyer_image} /></td>
       <td>{lawyer.lawyer.first_name} {lawyer.lawyer.last_name}</td>
       <td>@{lawyer.lawyer.username}</td>
       <td>{lawyer.lawyer.email}</td>
@@ -93,7 +93,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
         :
           <Avatar className=" align-items-center"
   alt="Remy Sharp"
-  src="/static/images/avatar/1.jpg"
+  src={lawyerProfile && lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.lawyer_image}
   sx={{ width: 100, height: 100 }}
 />}
           </Modal.Title>
@@ -108,7 +108,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Username"
           defaultValue={lawyerProfile && lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.lawyer.username}
           InputProps={{
             readOnly: true,
@@ -119,7 +119,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Name"
           defaultValue={lawyerProfile && lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.lawyer.first_name + " " + lawyerProfile && lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.lawyer.last_name}
           InputProps={{
             readOnly: true,
@@ -130,7 +130,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Email"
           defaultValue={lawyerProfile && lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.lawyer.email}
           InputProps={{
             readOnly: true,
@@ -141,7 +141,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Phone"
           defaultValue={lawyerProfile && lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.phone}
           InputProps={{
             readOnly: true,
@@ -152,7 +152,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Enrollment Number"
           defaultValue={ lawyerProfile.lawyer_id && lawyerProfile.lawyer_id.enrollment_number}
           InputProps={{
             readOnly: true,
@@ -165,7 +165,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Gender"
           defaultValue={lawyerProfile.gender}
           InputProps={{
             readOnly: true,
@@ -176,7 +176,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Degree"
           defaultValue={lawyerProfile.degree}
           InputProps={{
             readOnly: true,
@@ -187,7 +187,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Practice Area"
           defaultValue={lawyerProfile.area_practice}
           InputProps={{
             readOnly: true,
@@ -198,7 +198,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="BAR Name"
           defaultValue={lawyerProfile.bar_name}
           InputProps={{
             readOnly: true,
@@ -209,7 +209,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Practice Court"
           defaultValue={lawyerProfile.court}
           InputProps={{
             readOnly: true,
@@ -220,7 +220,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Description"
           defaultValue={lawyerProfile.description}
           InputProps={{
             readOnly: true,
@@ -231,7 +231,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Exprience"
           defaultValue={lawyerProfile.experience}
           InputProps={{
             readOnly: true,
@@ -242,7 +242,7 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             <Col md={4} className="p-2">
             <TextField
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Languages"
           defaultValue={lawyerProfile.language}
           InputProps={{
             readOnly: true,
@@ -251,9 +251,9 @@ const {getLawyerProfile, lawyerProfile,hireLawyer} = useContext(AdminContext)
             </Col>
 
             <Col md={4} className="p-2">
-              <a href={lawyerProfile.file_cv} target="_blank">
-              <Button className="btn-lg" variant="outlined">View CV</Button>
-              </a>
+                <a href={lawyerProfile.file_cv} target="_blank" rel="noopener">
+                <Button className="btn-lg" variant="outlined">View CV</Button>
+                </a>
             </Col>
             
             <Col>

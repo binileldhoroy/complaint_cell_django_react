@@ -1,0 +1,22 @@
+.customDatePickerWidth, 
+.customDatePickerWidth > div.react-datepicker-wrapper, 
+.customDatePickerWidth > div > div.react-datepicker__input-container
+.customDatePickerWidth > div > div.react-datepicker__input-container input {
+   width: 100%;
+}
+
+.avater-profile{
+    border: 1px solid lightgrey !important;
+}
+
+.profile-container{
+
+    box-shadow: 0px 1px 1px 1px #cfcfcf !important;
+}
+
+h2{
+    text-align: left;
+    margin-bottom: 25px;
+    padding: 10px;
+    font-weight: bold;
+}

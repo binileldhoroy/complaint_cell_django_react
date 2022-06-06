@@ -5,6 +5,7 @@ urlpatterns = [
     path('',views.getRoutes,name='routes'),
     path('police-signup/',views.RegisterView.as_view()),
     path('complaints/',views.getComplaint),
+    path('complaint/<str:pk>',views.viewComplaint),
     path('accepted-complaints/',views.acceptedComplaint),
     path('completed-complaints/',views.completedCase),
     path('accept-complaint/<str:pk>',views.acceptComplaint),

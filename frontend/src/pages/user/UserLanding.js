@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './UserLanding.css'
 import Header from '../../components/Header'
 import {Card,Button,Col, Row} from 'react-bootstrap'
@@ -9,8 +9,11 @@ import fir from '../../static/images/fir.png'
 import payment from '../../static/images/payment.png'
 import faq from '../../static/images/faq.png'
 import Footer from '../../components/Footer'
+import { AuthContext } from '../../context/UserContext'
 
 const UserLanding = () => {
+  const {userProfile,userInfo} = useContext(AuthContext)
+  
   return (
     <div>
         <Header/>
@@ -22,7 +25,7 @@ const UserLanding = () => {
         <Card.Img className="home-img" variant="top" src={complante} />
           </div>
         <Card.Body>
-            <Button className="home-btn" variant="outline-secondary">Register</Button>
+            <Button className="home-btn" variant="outline-secondary">Complaint Register</Button>
         </Card.Body>
         </Card>
       </Col>

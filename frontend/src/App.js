@@ -21,6 +21,12 @@ import { LawyerProvider } from './context/LawyerContext';
 import { AdminProvider } from './context/AdminContext';
 import PoliceSignUpAdmin from './pages/admin/policedetails/PoliceSignUpAdmin';
 import ActiveLawyers from './pages/admin/lawyerdetails/ActiveLawyers';
+import UserProfile from './pages/user/userprofile/UserProfile';
+import NewComplaints from './pages/police/NewComplaints';
+import ViewComplaint from './pages/police/ViewComplaint';
+import AcceptedComplaints from './pages/police/AcceptedComplaints';
+import ViewAcceptedComplaint from './pages/police/ViewAcceptedComplaint';
+import CompletedComplaints from './pages/police/CompletedComplaints';
 
 function App() {
   return (
@@ -38,6 +44,12 @@ function App() {
                 <UserLanding/>
               </PrivateRoutePeople>
             } />
+
+              <Route path="/myprofile" element={
+              <PrivateRoutePeople>
+                <UserProfile/>
+              </PrivateRoutePeople>
+            } />
           </Routes>
         </AuthProvider>
 
@@ -49,10 +61,37 @@ function App() {
                 <PoliceHome/>
               </PrivateRoutePeople>
         } />
+        <Route path="/police/newcomplaints" element={
+          <PrivateRoutePeople>
+                <NewComplaints/>
+              </PrivateRoutePeople>
+        } />
+        <Route path="/police/viewcomplaint" element={
+          <PrivateRoutePeople>
+                <ViewComplaint/>
+              </PrivateRoutePeople>
+        } />
+         <Route path="/police/accepted" element={
+          <PrivateRoutePeople>
+                <AcceptedComplaints/>
+              </PrivateRoutePeople>
+        } />
+        
+        <Route path="/police/viewaccepted" element={
+          <PrivateRoutePeople>
+                <ViewAcceptedComplaint/>
+              </PrivateRoutePeople>
+        } />
+        <Route path="/police/completed" element={
+          <PrivateRoutePeople>
+                <CompletedComplaints/>
+              </PrivateRoutePeople>
+        } />
         </Routes>
+        
         </PoliceProvider>
 
-        {/* Admon routes */}
+        {/* Admin routes */}
         <AdminProvider>
         <Routes>
         <Route path="/dashboard" element={

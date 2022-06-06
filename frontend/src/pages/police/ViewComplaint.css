@@ -1,0 +1,11 @@
+.label_name{
+    font-size: 15px;
+    font-weight: bold;
+    color: #7a8a93;
+}
+
+.label_value{
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: capitalize;
+}

@@ -45,7 +45,11 @@ function Header() {
 
               <Dropdown.Menu >
                 <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                <Dropdown.Item >
+                  <Link to="/myprofile">
+                  <Button variant="outline-danger">My Profile</Button>
+                  </Link>
+                  </Dropdown.Item>
                 <Dropdown.Item ><Button variant="outline-danger"  onClick={logoutUser}>Logout</Button></Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
