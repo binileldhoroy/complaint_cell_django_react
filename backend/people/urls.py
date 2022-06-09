@@ -17,5 +17,11 @@ urlpatterns = [
     path('view-lawyers/',views.viewLawyers),
     path('lawyers-details/<str:pk>',views.viewLawyerDetails),
     path('accepted-complaints/',views.acceptComplaintUser),
+    path('my-complaints/',views.myComplaints),
+    path('single-complaints/',views.singleComplaint),
     path('forwardto-lawyer/',views.forwardToLawyer),
+    path('police-district/',views.getPoliceDistrict),
+    path('police-station/<str:pk>',views.getPoliceStation),
+    path('send-otp/',views.otp_login_code),
+    path('otp-verify/',views.otp_verify_code),
 ]

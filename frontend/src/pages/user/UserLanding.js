@@ -10,6 +10,7 @@ import payment from '../../static/images/payment.png'
 import faq from '../../static/images/faq.png'
 import Footer from '../../components/Footer'
 import { AuthContext } from '../../context/UserContext'
+import { Link } from 'react-router-dom'
 
 const UserLanding = () => {
   const {userProfile,userInfo} = useContext(AuthContext)
@@ -25,7 +26,9 @@ const UserLanding = () => {
         <Card.Img className="home-img" variant="top" src={complante} />
           </div>
         <Card.Body>
+          <Link to='/mycomplaints'>
             <Button className="home-btn" variant="outline-secondary">Complaint Register</Button>
+          </Link>
         </Card.Body>
         </Card>
       </Col>

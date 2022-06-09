@@ -2,17 +2,19 @@ import React, {useContext, useEffect} from 'react'
 import { Table} from 'react-bootstrap'
 import Avatar from '@mui/material/Avatar';
 import { AdminContext } from '../../../context/AdminContext'
+import { Box, Skeleton } from '@mui/material';
 
 const ActiveLawyers = () => {
-    const {getActiveLawyers,activeLawyers} = useContext(AdminContext)
+    const {getActiveLawyers,activeLawyers,lawyerLoading} = useContext(AdminContext)
     useEffect(() => {
         getActiveLawyers()
   } , [])
 
 
   return (
-    <div>
+    <>
          <h2>Active Lawyers</h2>
+      {lawyerLoading === true ?
             <Table striped bordered hover>
   <thead>
     <tr>
@@ -45,7 +47,18 @@ const ActiveLawyers = () => {
     
   </tbody>
 </Table>
-    </div>
+
+:
+<div className='d-flex justify-content-center'>
+
+<Box sx={{ width: 700 }} >
+      <Skeleton />
+      <Skeleton animation="wave" />
+      <Skeleton animation={false} />
+    </Box>
+</div>
+}
+    </>
   )
 }
 

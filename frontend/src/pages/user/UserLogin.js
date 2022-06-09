@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { LoginContext } from '../../context/LoginContext'
+import { Spinner } from 'react-bootstrap'
 
 
 
@@ -16,7 +17,7 @@ const schema =  yup.object().shape({
 
 const UserLogin = () => {
 
-  const {loginUser,errorMsg} = useContext(LoginContext)
+  const {loginUser,errorMsg,loginLoading} = useContext(LoginContext)
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   })
@@ -47,7 +48,17 @@ const UserLogin = () => {
   </div>
 
   <div className="pt-1 mb-4">
-    <button className="btn btn-info btn-lg btn-block" type="submit">Login</button>
+    <button className="btn btn-info btn-lg btn-block" type="submit">
+      {loginLoading === false ?
+    <Spinner
+    as="span"
+    animation="border"
+    size="sm"
+    role="status"
+    aria-hidden="true"
+  />
+: ''}
+      Login</button>
   </div>
 
   <label className="text-danger">{errorMsg}</label>

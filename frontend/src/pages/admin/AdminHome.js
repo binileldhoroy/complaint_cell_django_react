@@ -7,13 +7,14 @@ import { GoLaw } from "react-icons/go";
 import { GiPoliceOfficerHead } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import empty from '../../static/gif/not-found.gif'
+import Footer from "../../components/Footer";
 
 const AdminHome = ({children}) => {
   return (
     <>
       <style>{`body {background:#e5e5e5}`}</style>
-      <div>
         <AdminHeader />
+      <div className="mb-2 me-2">
 
         <Row className=" ps-1 pt-5">
           <Col md={3}>
@@ -67,6 +68,7 @@ const AdminHome = ({children}) => {
           </Col>
         </Row>
       </div>
+      <Footer/>
     </>
   );
 };

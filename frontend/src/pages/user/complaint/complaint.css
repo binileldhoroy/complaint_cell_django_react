@@ -1,0 +1,15 @@
+.main_card{
+    box-shadow: 0px 0px 10px 0px #ccc;
+}
+
+
+.list_view_btn{
+    border-radius: 25px !important;
+    background-color: #5fd09d !important;
+    border-color: #00bc8c !important;
+}
+
+.list_view_btn:hover{
+    background-color: #5fd09d   !important;
+    color: #fff !important;
+}

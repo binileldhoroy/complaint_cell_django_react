@@ -95,6 +95,7 @@ class ComplaintRegistration(models.Model):
     complaint_status = models.CharField(max_length=150,choices=comp_status_type,null=True,default='Registred')
     case_status  = models.CharField(max_length=150,choices=case_status,null=True)
     ref_number = models.CharField(max_length=12,blank=True,null=True)
+    requested_date = models.DateTimeField(auto_now_add=True,blank=True,null=True)
 
     def __str__(self):
         return self.complaint_nature
@@ -113,3 +114,18 @@ class AssignedComplaints(models.Model):
     lawyer = models.ForeignKey(Lawyer, on_delete=models.CASCADE,null=True)
     complaint = models.ForeignKey(ComplaintRegistration,on_delete=models.CASCADE,null=True)
     is_accept = models.BooleanField(default=False)
+
+
+
+class PoliceDistrict(models.Model):
+    police_district = models.CharField(max_length=100,null=True,unique=True)
+
+    def __str__(self):
+        return self.police_district
+
+class PoliceStation(models.Model):
+    police_district = models.ForeignKey(PoliceDistrict,on_delete=models.CASCADE,null=True)
+    police_station = models.CharField(max_length=100,null=True,unique=True)
+
+    def __str__(self):
+        return self.police_station

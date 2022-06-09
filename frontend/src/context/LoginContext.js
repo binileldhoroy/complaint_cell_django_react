@@ -11,8 +11,17 @@ export const LoginContext = createContext()
 export const LoginProvider = ({children}) => {
     const [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     const [user, setUser] = useState(()=> localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
-    const [loading, setLoading] = useState(true)
+    const [loginLoading, setLoginLoading] = useState(true)
     const [errorMsg,setErrorMsg] = useState('')
+    const [userType,setUserType] = useState(()=> localStorage.getItem('authTokens') ? jwt_decode(JSON.parse(localStorage.getItem('authTokens')).access).type : null)
+    const [policeDistrict,setPoliceDistrict] = useState([])
+    const [policeStation,setPoliceStation] = useState([])
+    const [otpBtn,setOtpBtn] = useState(true)
+    const [otpVerify,setOtpVerify] = useState(false)
+    const [doneOtp,setDoneOtp] = useState(false)
+    const [singnUpLoading,setSignUpLoading] = useState(false)
+    const [errorOtp,setErrorOtp] = useState(false)
+    const [verifyBtn,setVerifyBtn] = useState(true)
 
     const navagat = useNavigate()
 
@@ -20,31 +29,37 @@ export const LoginProvider = ({children}) => {
     // ueserLogin
 
     const loginUser = async (e) => {
+        setLoginLoading(false)
         await axios.post(`${baseUrl}token/`,{
             'username':e.username,
             'password': e.password
         }).then(res => {
             console.log(res.data);
-            const userType = (jwt_decode(res.data.access).type)
-            if (userType === 'is_user'){
+            const type = jwt_decode(res.data.access).type
+            setUserType(jwt_decode(res.data.access).type)
+            if (type === 'is_user'){
                 setAuthTokens(res.data);
                 setUser(jwt_decode(res.data.access))
                 localStorage.setItem('authTokens',JSON.stringify(res.data))
+                setLoginLoading(true)
                 navagat('/home')
-            }else if(userType === 'is_lawyer'){
+            }else if(type === 'is_lawyer'){
                 setAuthTokens(res.data);
                 setUser(jwt_decode(res.data.access))
                 localStorage.setItem('authTokens',JSON.stringify(res.data))
+                setLoginLoading(true)
                 navagat('/lawyer/lawyer-home')
-            }else if(userType === 'is_police'){
+            }else if(type === 'is_police'){
                 setAuthTokens(res.data);
                 setUser(jwt_decode(res.data.access))
                 localStorage.setItem('authTokens',JSON.stringify(res.data))
+                setLoginLoading(true)
                 navagat('/police/home')
-            }else if(userType === 'is_superuser'){
+            }else if(type === 'is_superuser'){
                 setAuthTokens(res.data);
                 setUser(jwt_decode(res.data.access))
                 localStorage.setItem('authTokens',JSON.stringify(res.data))
+                setLoginLoading(true)
                 navagat('/dashboard')
             }
         }).catch(err => {
@@ -71,18 +86,94 @@ export const LoginProvider = ({children}) => {
               });
                 setAuthTokens(null)
                 setUser(null)
+                setUserType('')
                 localStorage.removeItem('authTokens')
                 navagat('/login')
             } 
           })
         }
 
+    const getPoliceDistrict = async () => {
+        await axios.get(`${baseUrl}police-district/`,{}).then(res => {
+            console.log(res.data);
+            setPoliceDistrict(res.data)
+        }).catch(err => {
+            console.log(err.data);
+        })
+    }
+
+
+    const getPoliceStation = async (id) => {
+        await axios.get(`${baseUrl}police-station/${id}`,{}).then(res => {
+            console.log(res.data);
+            setPoliceStation(res.data)
+        }).catch(err => {
+            console.log(err.data);
+        })
+    }
+
+    const sendOtp = async (phone) => {
+        console.log(phone);
+        setSignUpLoading(true)
+        await axios.post(`${baseUrl}send-otp/`,{
+            'mobile_no':phone
+        }).then(res => {
+            console.log(res.data);
+            setOtpBtn(false)
+        setSignUpLoading(false)
+            swal("OTP Sent", {
+                icon: "success",
+              });
+        }).catch(err => {
+            console.log(err.data);
+            setSignUpLoading(false)
+            swal("OTP Not Sent", {
+                icon: "error",
+              });
+        })
+    }
+
+    const verifyOtp = async (otp,phone) => {
+        setSignUpLoading(true)
+        await axios.post(`${baseUrl}otp-verify/`,{
+            'otp':otp,
+            'mobile_no':phone,
+        }).then(res => {
+            if(res.data === 'approved'){
+                setSignUpLoading(false)
+                setOtpVerify(true)
+                setOtpBtn(false)
+                setDoneOtp(true)
+                setErrorOtp(false)
+                setVerifyBtn(false)
+            }else if(res.data ==='pending'){
+                setSignUpLoading(false)
+                setDoneOtp(false)
+                setErrorOtp(true)
+            }
+            })
+    }
+
 
     const loginContextData = {
         loginUser,
         user,
         logoutUser,
-        authTokens
+        authTokens,
+        userType,
+        getPoliceDistrict,
+        policeDistrict,
+        policeStation,
+        getPoliceStation,
+        loginLoading,
+        sendOtp,
+        otpBtn,
+        otpVerify,
+        verifyOtp,
+        doneOtp,
+        singnUpLoading,
+        errorOtp,
+        verifyBtn,
     }
 
     return (

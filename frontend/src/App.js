@@ -7,7 +7,7 @@ import UserLogin from './pages/user/UserLogin'
 import UserSignUp from './pages/user/UserSignUp';
 import UserLanding from './pages/user/UserLanding';
 import { AuthProvider } from './context/UserContext';
-import { PrivateRoutePeople } from './utils/PrivateRoute';
+import { PrivateRouteAdmin, PrivateRoutePeople, PrivateRoutePolice } from './utils/PrivateRoute';
 import PoliceHome from './pages/police/PoliceHome';
 import AdminHome from './pages/admin/AdminHome';
 import UserList from './pages/admin/userdetails/UserList';
@@ -27,6 +27,8 @@ import ViewComplaint from './pages/police/ViewComplaint';
 import AcceptedComplaints from './pages/police/AcceptedComplaints';
 import ViewAcceptedComplaint from './pages/police/ViewAcceptedComplaint';
 import CompletedComplaints from './pages/police/CompletedComplaints';
+import MyComplaints from './pages/user/complaint/MyComplaints';
+import RegisterComplaint from './pages/user/complaint/RegisterComplaint';
 
 function App() {
   return (
@@ -41,13 +43,24 @@ function App() {
             <Route path="/login" element={<UserLogin/>} />
             <Route path="/home" element={
               <PrivateRoutePeople>
-                <UserLanding/>
+                <UserLanding />
               </PrivateRoutePeople>
             } />
 
               <Route path="/myprofile" element={
               <PrivateRoutePeople>
                 <UserProfile/>
+              </PrivateRoutePeople>
+            } />
+            <Route path="/mycomplaints" element={
+              <PrivateRoutePeople>
+                <MyComplaints/>
+              </PrivateRoutePeople>
+            } />
+
+            <Route path="/register" element={
+              <PrivateRoutePeople>
+                <RegisterComplaint/>
               </PrivateRoutePeople>
             } />
           </Routes>
@@ -57,35 +70,35 @@ function App() {
         <PoliceProvider>
         <Routes>
         <Route path="/police/home" element={
-          <PrivateRoutePeople>
+          <PrivateRoutePolice>
                 <PoliceHome/>
-              </PrivateRoutePeople>
+              </PrivateRoutePolice>
         } />
         <Route path="/police/newcomplaints" element={
-          <PrivateRoutePeople>
+          <PrivateRoutePolice>
                 <NewComplaints/>
-              </PrivateRoutePeople>
+              </PrivateRoutePolice>
         } />
         <Route path="/police/viewcomplaint" element={
-          <PrivateRoutePeople>
+          <PrivateRoutePolice>
                 <ViewComplaint/>
-              </PrivateRoutePeople>
+              </PrivateRoutePolice>
         } />
          <Route path="/police/accepted" element={
-          <PrivateRoutePeople>
+          <PrivateRoutePolice>
                 <AcceptedComplaints/>
-              </PrivateRoutePeople>
+              </PrivateRoutePolice>
         } />
         
         <Route path="/police/viewaccepted" element={
-          <PrivateRoutePeople>
+          <PrivateRoutePolice>
                 <ViewAcceptedComplaint/>
-              </PrivateRoutePeople>
+              </PrivateRoutePolice>
         } />
         <Route path="/police/completed" element={
-          <PrivateRoutePeople>
+          <PrivateRoutePolice>
                 <CompletedComplaints/>
-              </PrivateRoutePeople>
+              </PrivateRoutePolice>
         } />
         </Routes>
         
@@ -95,35 +108,35 @@ function App() {
         <AdminProvider>
         <Routes>
         <Route path="/dashboard" element={
-          <PrivateRoutePeople>
+          <PrivateRouteAdmin>
             <AdminHome/>
-          </PrivateRoutePeople>
+          </PrivateRouteAdmin>
         } />
         <Route path="/dashboard/user-list" element={
-          <PrivateRoutePeople>
+          <PrivateRouteAdmin>
             <AdminHome children={<UserList/>}/>
-          </PrivateRoutePeople>
+          </PrivateRouteAdmin>
         } />
         <Route path="/dashboard/lawyer-list" element={
-          <PrivateRoutePeople>
+          <PrivateRouteAdmin>
              <AdminHome children={<LawyerList/>}/>
-          </PrivateRoutePeople>
+          </PrivateRouteAdmin>
         } />
         <Route path="/dashboard/active-lawyers" element={
-          <PrivateRoutePeople>
+          <PrivateRouteAdmin>
              <AdminHome children={<ActiveLawyers/>}/>
-          </PrivateRoutePeople>
+          </PrivateRouteAdmin>
         } />
         <Route path="/dashboard/police-list" element={
-          <PrivateRoutePeople>
+          <PrivateRouteAdmin>
             <AdminHome children={<PoliceList/>}/>
-            </PrivateRoutePeople>
+            </PrivateRouteAdmin>
         } />
 
         <Route path="/dashboard/police-signup" element={
-          <PrivateRoutePeople>
+          <PrivateRouteAdmin>
             <AdminHome children={<PoliceSignUpAdmin/>}/>
-            </PrivateRoutePeople>
+            </PrivateRouteAdmin>
         } />
         </Routes>
         </AdminProvider>

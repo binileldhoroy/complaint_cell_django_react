@@ -56,6 +56,7 @@ class PersonalInfoSerializerGet(serializers.ModelSerializer):
         fields = '__all__'
 
 class ComplaintRegistrationSerializer(serializers.ModelSerializer):
+    people = PeopleInfoGet()
     class Meta:
         model = ComplaintRegistration
         fields = '__all__'
@@ -78,3 +79,14 @@ class AssignedComplaintsSerializer(serializers.ModelSerializer):
         model = AssignedComplaints
         fields = '__all__'
 
+
+class PoliceDistrictSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PoliceDistrict
+        fields = '__all__'
+
+class PoliceStationSerializer(serializers.ModelSerializer):
+    police_district = PoliceDistrictSerializer()
+    class Meta:
+        model = PoliceStation
+        fields = '__all__'

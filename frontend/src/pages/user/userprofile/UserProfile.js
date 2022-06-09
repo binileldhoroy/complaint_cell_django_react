@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Form, Row, Spinner } from "react-bootstrap";
 import Footer from "../../../components/Footer";
 import Header from "../../../components/Header";
 import Avatar from "@mui/material/Avatar";
@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { FormControl } from "react-bootstrap";
+import SearchIcon from '@mui/icons-material/Search';
 
 
 const schema = yup.object().shape({
@@ -38,7 +39,16 @@ const schema = yup.object().shape({
 
 const UserProfile = () => {
 
-  const {userProfile,userInfo,updateUserProfile} = useContext(AuthContext)
+  const {
+    userProfile,
+    userInfo,
+    updateUserProfile,
+    searchPostOffice,
+    pincodeDetails,
+    pinLoading,
+  } = useContext(AuthContext)
+
+  
 
   useEffect(() => {
     userProfile() 
@@ -49,8 +59,7 @@ const UserProfile = () => {
   })
 
   const [image,setImage] = useState(null)
-
-  
+  const [pinCode,setPinCode] = useState(null)
 
   return (
     <div>
@@ -153,7 +162,7 @@ const UserProfile = () => {
                     <label htmlFor="floatingInputCustom">Gender</label>
                     </Col>
                     <Col md={8}>
-                    <Form.Select {...register('gender')} defaultValue={userInfo.gender ? userInfo.gender:''}  aria-label="Default select example">
+                    <Form.Select {...register('gender')} defaultValue={userInfo && userInfo.gender ? userInfo.gender:''}  aria-label="Default select example">
                     <option>Select..</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -170,13 +179,13 @@ const UserProfile = () => {
                     <label htmlFor="floatingInputCustom">Relation Type</label>
               </Col>
               <Col md={8}>
-              <Form.Select {...register('relation_type')} defaultValue={userInfo.relative_type ? userInfo.relative_type:''} aria-label="Default select example">
+              <Form.Select {...register('relation_type')} defaultValue={userInfo && userInfo.relative_type ? userInfo.relative_type:''}  aria-label="Default select example">
                     <option>Select..</option>
                     <option value="Father">Father</option>
                     <option value="Mother">Mother</option>
                     <option value="Guardin">Guardin</option>
                     <option value="Husband">Husband</option>
-                    <option value="Guardin">Wife</option>
+                    <option value="Wife">Wife</option>
                   </Form.Select>
                   <p style={{color:'red'}} >{errors.relation_type?.message}</p>
               </Col>
@@ -203,7 +212,7 @@ const UserProfile = () => {
                     <label htmlFor="floatingInputCustom">ID Type</label>
                     </Col>
                     <Col md={8}>
-                    <Form.Select {...register('id_type')} defaultValue={userInfo.proof_type ? userInfo.proof_type:''} aria-label="Default select example">
+              <Form.Select {...register('id_type')} defaultValue={userInfo && userInfo.proof_type ? userInfo.proof_type:''}  aria-label="Default select example">
                     <option>Select..</option>
                     <option value="AADHAR CARD">AADHAR CARD</option>
                     <option value="Income Tax(PAN) Card">Income Tax PAN Card</option>
@@ -274,7 +283,7 @@ const UserProfile = () => {
                     </Col>
                     <Col md={8}>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                      <Form.Control type="text" defaultValue={userInfo.locality ? userInfo.locality:''} {...register('locality')} placeholder="Locality" />
+                      <Form.Control type="text" value={userInfo.locality ? userInfo.locality:''} {...register('locality')} placeholder="Locality" />
                     </Form.Group>
                     <p style={{color:'red'}} >{errors.locality?.message}</p>
                     </Col>
@@ -284,9 +293,29 @@ const UserProfile = () => {
                     <label htmlFor="floatingInputCustom">Pin Code</label>
                     </Col>
                     <Col md={8}>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                      <Form.Control type="text" defaultValue={userInfo.pin_code ? userInfo.pin_code:''} {...register('pincode')} placeholder="Pin Code" />
+                      {userInfo && userInfo.pin_code ? (
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Control type="text" value={userInfo.pin_code ? userInfo.pin_code:''} {...register('pin_code')} placeholder="Pincode" />
+                      </Form.Group>
+                      ):(
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                      <Form.Control type="text" 
+                       defaultValue={pinCode}
+                      onKeyUp={(e)=>{
+                        setPinCode(e.target.value)
+                      }}
+                      {...register('pincode')} placeholder="Pin Code" />
+                      <Button className="mt-1" onClick={() => searchPostOffice(pinCode)}  variant="contained" endIcon={<SearchIcon />}>
+        Search
+{pinLoading ?(
+        <Spinner  animation="border" role="status">
+  <span className="visually-hidden">Loading...</span>
+</Spinner>
+):''}
+      </Button>
                     </Form.Group>
+                      )}
+                    
                     <p style={{color:'red'}} >{errors.pincode?.message}</p>
                     </Col>
 
@@ -294,13 +323,26 @@ const UserProfile = () => {
 
               <Col md={6} className="row">
 
+
               <Col md={4}>
                     <label htmlFor="floatingInputCustom">Village/Town/City</label>
               </Col>
               <Col md={8}>
+              {userInfo && userInfo.village ?(
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                       <Form.Control type="text" defaultValue={userInfo.village ? userInfo.village:''} {...register('village')} placeholder="Village/Town/City" />
-                    </Form.Group>
+                </Form.Group>
+              ):(
+              <Form.Select  aria-label="Default select example">
+                {pincodeDetails && pincodeDetails.map((item,index) => {
+                  return(
+                    <option key={index} value={item.Name}>{item.Name}</option>
+                  )
+                })}
+
+                    {/* <option value="AADHAR CARD">AADHAR CARD</option> */}
+                  </Form.Select>
+              )}
                     <p style={{color:'red'}} >{errors.village?.message}</p>
               </Col>
 
@@ -308,9 +350,15 @@ const UserProfile = () => {
                     <label htmlFor="floatingInputCustom">Country</label>
               </Col>
               <Col md={8}>
-              <Form.Group className="mb-3"  controlId="exampleForm.ControlInput1">
-                      <Form.Control type="text" defaultValue={userInfo.country ? userInfo.country:''} {...register('country')} placeholder="Country" />
+                {userInfo && userInfo.country ?(
+                  <Form.Group className="mb-3"  controlId="exampleForm.ControlInput1">
+                      <Form.Control type="text" value={userInfo && userInfo.country} {...register('country')} placeholder="Country" />
                     </Form.Group>
+                ):(
+              <Form.Group className="mb-3"  controlId="exampleForm.ControlInput1">
+                      <Form.Control type="text" value={pincodeDetails[0] && pincodeDetails[0].Country} {...register('country')} placeholder="Country" />
+                    </Form.Group>
+                )}
                     <p style={{color:'red'}} >{errors.country?.message}</p>
               </Col>
 
@@ -319,19 +367,36 @@ const UserProfile = () => {
                     <label htmlFor="floatingInputCustom">State</label>
               </Col>
               <Col md={8}>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                      <Form.Control type="text" defaultValue={userInfo.state ? userInfo.state:''} {...register('state')} placeholder="State" />
-                    </Form.Group>
+                {userInfo && userInfo.state ?(
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control type="text" value={userInfo && userInfo.state} {...register('state')} placeholder="State" />
+                  
+                </Form.Group>
+                ):(
+
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                          <Form.Control type="text" value={pincodeDetails[0] && pincodeDetails[0].State} {...register('state')} placeholder="State" />
+                          
+                        </Form.Group>
+                )}
                     <p style={{color:'red'}} >{errors.state?.message}</p>
+                    
               </Col>
 
               <Col md={4}>
                     <label htmlFor="floatingInputCustom">Police District</label>
               </Col>
               <Col md={8}>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                      <Form.Control type="text" defaultValue={userInfo.police_district ? userInfo.police_district:''} {...register('ps_district')} placeholder="Police District" />
-                    </Form.Group>
+                {userInfo && userInfo.police_district ?(
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control type="text" value={userInfo && userInfo.police_district} {...register('ps_district')} placeholder="Police District" />
+                </Form.Group>
+                ):(
+
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                          <Form.Control type="text" value={pincodeDetails[0] && pincodeDetails[0].District} {...register('ps_district')} placeholder="Police District" />
+                        </Form.Group>
+                )}
                     <p style={{color:'red'}} >{errors.ps_district?.message}</p>
               </Col>
 

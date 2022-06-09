@@ -13,6 +13,10 @@ from lawyer.models import Lawyer,LawyerPersonalInfo
 from dashboard.serializers import GetLawyerProfileSerializer
 
 from police.models import Police
+from django.http import HttpResponse
+
+from decouple import config
+from twilio.rest import Client
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -223,6 +227,41 @@ def acceptComplaintUser(request):
         data = 'Your account is blocked by Admin '
         return Response(data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def myComplaints(request):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        complaint = ComplaintRegistration.objects.filter(people = people)
+        serializer = ComplaintRegistrationSerializer(complaint,many=True)
+        return Response(serializer.data)
+    else:
+        data = 'Your account is blocked by Admin '
+        return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def singleComplaint(request,pk):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people = user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        complaint = ComplaintRegistration.objects.filter(id=pk)
+        serializer = ComplaintRegistrationSerializer(complaint)
+        return Response(serializer.data)
+    else:
+        data = 'Your account is blocked by Admin '
+        return Response(data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -245,3 +284,45 @@ def forwardToLawyer(request):
         data = 'Your account is blocked by Admin '
         return Response(data)       
 
+
+@api_view(['GET'])
+def getPoliceDistrict(request):
+    police_dist = PoliceDistrict.objects.all()
+    serializer = PoliceDistrictSerializer(police_dist,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getPoliceStation(request,pk):
+    police_station = PoliceStation.objects.filter(police_district = pk)
+    serializer = PoliceStationSerializer(police_station,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def otp_login_code(request) :
+    number = '+91'+str(request.data['mobile_no'])
+    account_sid = config('account_sid')
+    auth_token = config('auth_token')
+    client = Client(account_sid, auth_token)
+    verification = client.verify \
+                    .services(config('messaging_service_sid')) \
+                    .verifications \
+                    .create(to=number, channel='sms')
+
+    print(verification.status)
+    return Response(verification.status)
+
+@api_view(['POST'])
+def otp_verify_code(request):
+    number = '+91'+str(request.data['mobile_no'])
+    print(number)
+    otp = request.data['otp']
+    account_sid = config('account_sid')
+    auth_token = config('auth_token')
+    client = Client(account_sid, auth_token)
+    verification_check = client.verify \
+                        .services(config('messaging_service_sid')) \
+                        .verification_checks \
+                        .create(to= number, code= str(otp))
+
+    return Response(verification_check.status)

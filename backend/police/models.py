@@ -11,7 +11,7 @@ class Police(models.Model):
     officer_position = models.CharField(max_length=100,null=True)
     ps_district = models.CharField(max_length=100,null=True)
     ps_place = models.CharField(max_length=100,null=True)
-    phone = models.IntegerField(unique=True,null=True)
+    phone = models.BigIntegerField(unique=True,null=True)
     is_police = models.BooleanField(default=True,null=True)
 
 

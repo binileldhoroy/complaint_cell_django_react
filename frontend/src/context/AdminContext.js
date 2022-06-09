@@ -9,7 +9,7 @@ export const AdminContext = createContext()
 
 
 export const AdminProvider = ({children}) => {
-    const [loading, setLoading] = useState(true)
+    const [lawyerLoading, setLawyerLoading] = useState(true)
     const [errorMsg,setErrorMsg] = useState('')
     const [users, setUsers] = useState([])
     const [lawyers, setLawyer] = useState([])
@@ -111,6 +111,7 @@ export const AdminProvider = ({children}) => {
     }
 
     const signUpPolice = async (e) => {
+        setLawyerLoading(false)
         await axios.post(`http://127.0.0.1:8000/api/police/police-signup/`,{
             'email': e.email,
             'username': e.username,
@@ -123,6 +124,7 @@ export const AdminProvider = ({children}) => {
             'password2': e.repassword,
         }).then(res => {
             console.log(res);
+            setLawyerLoading(true)
             navagat('/dashboard/police-list')
         }).catch(err => {
             setSignUpError(err);
@@ -130,6 +132,7 @@ export const AdminProvider = ({children}) => {
     }
 
     const getActiveLawyers = async () => {
+        setLawyerLoading(false)
         await axios.get(`${baseUrl}hired-lawyers/`,{
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
@@ -137,6 +140,7 @@ export const AdminProvider = ({children}) => {
         }).then(res => {
             console.log(res.data);
             setActiveLawyer(res.data)
+            setLawyerLoading(true)
         }).catch(err => {
             console.log(err);
         })
@@ -170,7 +174,8 @@ export const AdminProvider = ({children}) => {
         activeLawyers,
         getActiveLawyers,
         getPoliceStation,
-        policeInfo
+        policeInfo,
+        lawyerLoading
     }
 
     return(

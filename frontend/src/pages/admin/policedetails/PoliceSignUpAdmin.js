@@ -1,9 +1,11 @@
-import React, {useContext} from 'react'
-import {Col,Row} from 'react-bootstrap'
+import React, {useContext, useEffect} from 'react'
+import {Col,Form,Row} from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { AdminContext } from '../../../context/AdminContext'
+import { LoginContext } from '../../../context/LoginContext'
+import { Box, CircularProgress } from '@mui/material'
 
 
 const schema = yup.object().shape({
@@ -20,10 +22,15 @@ const schema = yup.object().shape({
 
 const PoliceSignUpAdmin = () => {
 
-    const {signUpPolice, errorMsg, signUpError} = useContext(AdminContext)
+    const {signUpPolice, errorMsg, signUpError,lawyerLoading} = useContext(AdminContext)
+    const {getPoliceDistrict,policeDistrict,getPoliceStation,policeStation} = useContext(LoginContext)
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       })
+
+      useEffect(() => {
+        getPoliceDistrict()
+    },[])
 
   return (
     <>   
@@ -82,7 +89,22 @@ const PoliceSignUpAdmin = () => {
 
             <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="text" {...register('district')} className="form-control form-control-lg" name='district' />
+
+                <Form.Select {...register('district')}   name='district'  aria-label="Default select example">
+                        <option>Select...</option>
+                    {policeStation && policeDistrict.map((district,index) => {
+                        return(
+                            <option key={index}
+                            onClick={
+                              () => getPoliceStation(district.id)
+                          }
+                            value={district.police_district}>{district.police_district}</option>
+                        )
+                    })}
+               
+                    </Form.Select>
+
+                  {/* <input type="text" {...register('district')} className="form-control form-control-lg" name='district' /> */}
                   <label className="form-label" >District</label>
                   <p style={{color:'red'}}>{errors.district?.message}</p>
                 </div>
@@ -90,8 +112,20 @@ const PoliceSignUpAdmin = () => {
 
             <Col md={6} className='px-3 '>
                 <div className="form-outline ">
-                  <input type="text" {...register('place')} className="form-control form-control-lg" name='place' />
+
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        {/* <Form.Label>Police Station</Form.Label> */}
+                        <Form.Select {...register('place')} name='place' aria-label="Default select example">
+                    {policeStation && policeStation.map((station,index) => {
+                        return(
+                            <option key={index} value={station.police_station}>{station.police_station}</option>
+                        )
+                    })}
+               
+                    </Form.Select>
                   <label className="form-label" >Place</label>
+                    </Form.Group>
+                  {/* <input type="text" {...register('place')} className="form-control form-control-lg" name='place' /> */}
                   <p style={{color:'red'}}>{errors.place?.message}</p>
                 </div>
             </Col>
@@ -112,7 +146,13 @@ const PoliceSignUpAdmin = () => {
                 </div>
                 </Col>
                 <div className="d-flex justify-content-center">
+                  {lawyerLoading === true ?
                   <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                  :
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+                }
                 </div>
               
 

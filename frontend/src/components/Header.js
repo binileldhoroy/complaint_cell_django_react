@@ -47,10 +47,10 @@ function Header() {
                 <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
                 <Dropdown.Item >
                   <Link to="/myprofile">
-                  <Button variant="outline-danger">My Profile</Button>
+                  <Button variant="outline-danger" style={{color:'black'}}>My Profile</Button>
                   </Link>
                   </Dropdown.Item>
-                <Dropdown.Item ><Button variant="outline-danger"  onClick={logoutUser}>Logout</Button></Dropdown.Item>
+                <Dropdown.Item ><Button variant="outline-danger" style={{color:'black'}}  onClick={logoutUser}>Logout</Button></Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             </p>

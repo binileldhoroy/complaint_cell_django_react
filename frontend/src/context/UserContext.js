@@ -10,12 +10,14 @@ export const AuthContext = createContext()
 export const AuthProvider = ({children}) => {
     // const [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     // const [user, setUser] = useState(()=> localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
-    const [loading, setLoading] = useState(true)
+    const [pinLoading, setPinLoading] = useState(false)
     const [signUpError, setSignUpError] = useState([])
     const [userInfo, setUserInfo] = useState([])
     const [userType, setUserType] = useState()
     const [userEdit,setUserEdit] = useState([])
     const [errorMsg,setErrorMsg] = useState('')
+    const [myComplaints,setMyComplaints] = useState([])
+    const [pincodeDetails,setPincodeDetails] = useState([])
 
     const navagat = useNavigate()
 
@@ -87,6 +89,30 @@ export const AuthProvider = ({children}) => {
         })
     }
 
+    const getMyComplaints = async () => {
+        await axios.get(`${baseUrl}my-complaints/`,{
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+              }
+        }).then(res => {
+            console.log(res.data);
+            setMyComplaints(res.data)
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    const searchPostOffice = async (pin) => {
+        setPinLoading(true)
+        await axios.get(`https://api.postalpincode.in/pincode/${pin}`,{}).then(res => {
+            console.log(res.data[0].PostOffice);
+            setPincodeDetails(res.data[0].PostOffice)
+            setPinLoading(false)
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     const contextData = {
         // loginUser,
         // user,
@@ -96,6 +122,11 @@ export const AuthProvider = ({children}) => {
         userProfile,
         userInfo,
         updateUserProfile,
+        getMyComplaints,
+        myComplaints,
+        searchPostOffice,
+        pincodeDetails,
+        pinLoading,
     }
 
     return(
