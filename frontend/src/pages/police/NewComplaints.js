@@ -45,7 +45,7 @@ const NewComplaints = () => {
                 <td>{newcomplaint.people.phone}</td>
                 <td>{newcomplaint.complaint_nature}</td>
                 <td>{newcomplaint.complaint_status}</td>
-                <td>{(newcomplaint.incident_date).slice(0,10)}</td>
+                <td>{newcomplaint.incident_date ? (newcomplaint.incident_date).slice(0,10): 'Unknown'}</td>
                 <td>{newcomplaint.incident_place}</td>
                 <td>
           <Button onClick={() => getViewComplaint(newcomplaint.id)} variant="contained" startIcon={<VisibilityIcon/>}>

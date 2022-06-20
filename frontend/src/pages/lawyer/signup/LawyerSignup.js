@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import { Row, Col, FloatingLabel, Form, Button } from "react-bootstrap";
 import "./LawyerSignup.css";
 import { useForm } from 'react-hook-form'
@@ -25,6 +25,8 @@ const schema = yup.object().shape({
 
 
 const LawyerSignup = (e) => {
+  const [image, setimage ] = useState('');
+
 
     const {signUpLawyer, errorMsg, signUpError} = useContext(LawyerContext)
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -105,7 +107,10 @@ const LawyerSignup = (e) => {
             <Col md={6}>
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>Default file input example</Form.Label>
-                <Form.Control {...register('profile')} type="file" />
+                <Form.Control onClick={(e)=>{
+                  setimage(e.target.files[0])
+
+                }} {...register('profile')} type="file" />
               </Form.Group>
               <p style={{color:'red'}} >{errors.profile?.message}</p>
             </Col>

@@ -63,8 +63,13 @@ export const LoginProvider = ({children}) => {
                 navagat('/dashboard')
             }
         }).catch(err => {
-            console.log(err.response.data.detail);
+            
+            console.log(err.response.data);
             setErrorMsg(err.response.data.detail)
+            setLoginLoading(true)
+            swal("invalid user", {
+                icon: "error",
+              });       
         })
     } 
 
@@ -113,14 +118,18 @@ export const LoginProvider = ({children}) => {
     }
 
     const sendOtp = async (phone) => {
-        console.log(phone);
+        if (phone === null || phone.length !== 10){
+            swal("Enter a valide number", {
+                icon: "error",
+              });
+        }else{
         setSignUpLoading(true)
         await axios.post(`${baseUrl}send-otp/`,{
             'mobile_no':phone
         }).then(res => {
             console.log(res.data);
             setOtpBtn(false)
-        setSignUpLoading(false)
+            setSignUpLoading(false)
             swal("OTP Sent", {
                 icon: "success",
               });
@@ -131,6 +140,7 @@ export const LoginProvider = ({children}) => {
                 icon: "error",
               });
         })
+    }
     }
 
     const verifyOtp = async (otp,phone) => {

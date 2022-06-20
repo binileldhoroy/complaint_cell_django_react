@@ -18,8 +18,12 @@ export const AuthProvider = ({children}) => {
     const [errorMsg,setErrorMsg] = useState('')
     const [myComplaints,setMyComplaints] = useState([])
     const [pincodeDetails,setPincodeDetails] = useState([])
+    const [profileLoader,setProfileLoader] = useState(false)
+    
 
-    const navagat = useNavigate()
+
+
+    const navigate = useNavigate()
 
     const baseUrl = 'http://127.0.0.1:8000/api/'
     // ueserLogin
@@ -36,6 +40,10 @@ export const AuthProvider = ({children}) => {
             'password2': e.repassword,
         }).then(res => {
             console.log(res.response.data);
+            navigate('/login')
+            swal("Register Successfully", {
+                icon: "success",
+              });
         }).catch(err => {
             setSignUpError(err.response.data);
         })
@@ -83,7 +91,7 @@ export const AuthProvider = ({children}) => {
             }
         }).then(res => {
             console.log(res.data);
-            navagat('/home')
+            navigate('/home')
         }).catch(err => {
             console.log(err);
         })
@@ -113,9 +121,53 @@ export const AuthProvider = ({children}) => {
         })
     }
 
+    const [fileDescription, setFileDescription] = useState('');
+    const [file, setFile] = useState();
+    const [descError, setDescError] = useState('')
+    const [attachError,setAttachError] = useState('')
+    const [complaintDate,setComplaintDate] = useState('')
+    const [complaintSuccess,setComplaintSuccess] = useState(false)
+    const [complaintResponce,setComplaintResponce] = useState('')
+    const [complaintLoader,setComplaintLoader] = useState(false)
+
+    const complaintRegister = async (e) => {
+        setComplaintLoader(true)
+        if(fileDescription === '' && file === undefined){
+            setAttachError('Please attach file')
+        }else{
+            axios.post(`${baseUrl}newcomplaint/`,{
+                'complaint_nature': e.complaint,
+                'incident_place': e.place,
+                'police_district': e.psdistrict,
+                'police_place': e.psstation,
+                'incident_date': complaintDate,
+                'file_discription': fileDescription,
+                'file_upload': file,
+                'compalaint_description': e.description,
+
+
+            },{
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            }).then(res => {
+                console.log(res.data);
+                setComplaintSuccess(true)
+                setComplaintResponce(res.data)
+                setFileDescription('')
+                setFile()
+                setComplaintDate('')
+                setComplaintLoader(false)
+                navigate('/register')
+            }).catch(err => {
+                console.log(err);
+                setComplaintLoader(false)
+            })
+        }
+    }
+
     const contextData = {
-        // loginUser,
-        // user,
         errorMsg,
         signUpUser,
         signUpError,
@@ -127,6 +179,21 @@ export const AuthProvider = ({children}) => {
         searchPostOffice,
         pincodeDetails,
         pinLoading,
+        setFileDescription,
+        fileDescription,
+        setFile,
+        file,
+        complaintRegister,
+        descError,
+        setDescError,
+        attachError,
+        setComplaintDate,
+        setAttachError,
+        complaintSuccess,
+        setComplaintSuccess,
+        complaintResponce,
+        complaintLoader,
+        
     }
 
     return(

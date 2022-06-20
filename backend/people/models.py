@@ -9,6 +9,7 @@ class People(models.Model):
     people = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
     phone = models.BigIntegerField(unique=True,null=True)
     is_people = models.BooleanField(default=True)
+    complete_profile = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.people)

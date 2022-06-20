@@ -13,3 +13,10 @@
     background-color: #5fd09d   !important;
     color: #fff !important;
 }
+
+.empty_gif{
+    display: flex !important;
+    justify-content: center !important;
+    height: 18rem !important;
+
+}

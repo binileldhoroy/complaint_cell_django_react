@@ -49,6 +49,12 @@ class PeopleInfoGet(serializers.ModelSerializer):
         model = People
         fields = '__all__'
 
+class UserInfo(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('first_name','email','last_name')
+
+
 class PersonalInfoSerializerGet(serializers.ModelSerializer):
     people = PeopleInfoGet()
     class Meta:
@@ -61,6 +67,11 @@ class ComplaintRegistrationSerializer(serializers.ModelSerializer):
         model = ComplaintRegistration
         fields = '__all__'
 
+
+class RegistrationComplaintSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComplaintRegistration
+        fields = '__all__'
 
 class LawyerListSerializer(serializers.ModelSerializer):
     class Meta:

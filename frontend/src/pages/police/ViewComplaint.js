@@ -111,7 +111,7 @@ const ViewComplaint = () => {
                             <label className="label_name">Date of Incident</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{(viewComplaint && viewComplaint.complaint.incident_date).slice(0,10)}</label>
+                            :<label>{viewComplaint.complaint.incident_date ? (viewComplaint.complaint.incident_date).slice(0,10) : 'Unknown'}</label>
                         </Col>
                     </Col>
 

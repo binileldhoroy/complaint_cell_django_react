@@ -1,0 +1,68 @@
+.complete{
+    background: rgb(47,125,69);
+    background: linear-gradient(90deg, rgba(47,125,69,1) 0%, rgba(0,255,111,1) 50%, rgba(47,125,69,1) 100%);
+    display: flex;
+    justify-content: center;
+}
+
+.done_icone{
+    width: 3rem !important;
+    height: 5rem !important;
+    color: white;
+}
+
+.head_text{
+    color: rgb(250, 60, 60);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.success_table{
+    display: flex;
+    justify-content: center;
+    width: 90%;
+}
+
+.table{
+    width: 60% !important;
+}
+
+.success_btn{
+    border: 0 !important;
+    outline: 0 !important;
+    border-color: wheat !important;
+    box-shadow: none !important;
+}
+
+.success_btn, .success_btn:hover, .success_btn:active, .success_btn:visited, 
+.success_btn:focus{
+    background-color:white !important;
+    color: rgb(47,125,69) !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    outline: none !important;
+}
+
+.btn_div{
+    margin-left: 15rem;
+}
+
+.success_text{
+    font-size: 1.2rem;
+    font-weight: bolder;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .btn_div{
+        margin-left: 5rem;
+    }
+}
+    
+@media screen and (max-width: 576px) {
+    .btn_div{
+        margin-left: 0rem;
+    }
+}

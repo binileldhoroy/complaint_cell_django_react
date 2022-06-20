@@ -1,6 +1,7 @@
 import {createContext,useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 export const LawyerContext = createContext()
@@ -17,6 +18,7 @@ export const LawyerProvider = ({children}) => {
 
 
     const signUpLawyer = async (e) => {
+  
         await axios.post(`${baseUrl}lawyer-signup/`,{
             'first_name':e.firstname,
             'last_name':e.lastname,
@@ -26,13 +28,18 @@ export const LawyerProvider = ({children}) => {
             'phone':e.phone,
             'password':e.password,
             'password2':e.repassword,
-            'lawyer_image':e.profile,
+            'lawyer_image':e.profile[0],
         },
         {
             headers: { "Content-Type": "multipart/form-data" },
         }
         ).then( res => {
             console.log(res);
+            navagat('/login')
+            swal("Register Successfully", {
+                icon: "success",
+
+            })
         }).catch(err => {
             console.log(err);
             setSignUpError(err.response.data);

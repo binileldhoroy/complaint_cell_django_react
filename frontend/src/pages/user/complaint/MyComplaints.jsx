@@ -8,16 +8,33 @@ import { AuthContext } from '../../../context/UserContext'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import swal from 'sweetalert'
+import empty_gif from '../../../static/gif/emptystate.gif'
 
 
 const MyComplaints = () => {
 
-    const {myComplaints,getMyComplaints} = useContext(AuthContext)
+    const {myComplaints,getMyComplaints,userProfile,userInfo,setComplaintSuccess} = useContext(AuthContext)
+    const navagat = useNavigate()
 
     useEffect(() => {
         getMyComplaints()
+        userProfile()
     },[]);
+
+    const Register = () => {
+        if (userInfo.complete_profile === true || userInfo.people.complete_profile === true) {
+            setComplaintSuccess(false)
+            navagat('/register')
+        }else{
+            navagat('/home')
+            swal("Complete Profile", {
+                icon: "error",
+              });
+        }
+    }
+
   return (
     <>
     <Header/>
@@ -25,9 +42,9 @@ const MyComplaints = () => {
 
             <div>
             <Stack spacing={2} direction="row" className="d-flex justify-content-end me-3 mt-2">
-                <Link to='/register'>
-                    <Button variant="contained" startIcon={<AddIcon/>} >New Complaint</Button>
-                </Link>
+               
+                    <Button variant="contained" onClick={Register} startIcon={<AddIcon/>} >New Complaint</Button>
+                
     </Stack>
                 <h2>Complaints</h2>
                 
@@ -39,7 +56,16 @@ const MyComplaints = () => {
             <Card className='main_card'>
             <Card.Body>
 
-            <div className='complaint_card'>
+            
+          <div className='complaint_card'>
+                {myComplaints.length <= 0 ?
+
+                (
+                    <div className='empty_gif'>
+                <img src={empty_gif} alt='list'/>
+</div>
+                ) :
+            (<>
                 {myComplaints && myComplaints.map((complaint,index) => {
                     return(
                         <Card className='complaint_card m-2' key={index}>
@@ -92,7 +118,8 @@ const MyComplaints = () => {
             </Card>
                     )
                 })}
-            
+            </>
+            )}
             </div>
 
             </Card.Body>

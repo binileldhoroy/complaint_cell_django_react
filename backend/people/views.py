@@ -93,8 +93,8 @@ def personalView(request):
             return Response(data)
         serializers = PersonalInfoSerializer(data=request.data)
         if serializers.is_valid():
-            print('success')
             serializers.save(people = people,pinfo_complete=True)
+            People.objects.filter(people = user).update(complete_profile=True)
             return Response(serializers.data)
         else:
             data = serializers.errors
@@ -152,12 +152,13 @@ def complaintRegistration(request):
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
+        name = UserInfo(user)
         profile_complete = PersonalInfo.objects.get(people = people)
         if profile_complete.pinfo_complete:
-            serializers = ComplaintRegistrationSerializer(data=request.data)
+            serializers = RegistrationComplaintSerializer(data=request.data)
             if serializers.is_valid():
                 serializers.save(people = people)
-                return Response(serializers.data)
+                return Response({'responce':serializers.data,'profile':name.data})
             else:
                 data = serializers.errors
                 return Response(data)
@@ -287,13 +288,13 @@ def forwardToLawyer(request):
 
 @api_view(['GET'])
 def getPoliceDistrict(request):
-    police_dist = PoliceDistrict.objects.all()
+    police_dist = PoliceDistrict.objects.filter().order_by('police_district')
     serializer = PoliceDistrictSerializer(police_dist,many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getPoliceStation(request,pk):
-    police_station = PoliceStation.objects.filter(police_district = pk)
+    police_station = PoliceStation.objects.filter(police_district = pk).order_by('police_station')
     serializer = PoliceStationSerializer(police_station,many=True)
     return Response(serializer.data)
 

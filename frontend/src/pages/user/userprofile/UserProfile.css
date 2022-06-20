@@ -20,3 +20,10 @@ h2{
     padding: 10px;
     font-weight: bold;
 }
+
+.profile_loader{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+}

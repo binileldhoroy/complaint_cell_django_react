@@ -59,7 +59,8 @@ def viewComplaint(request,pk):
         data = {'You are not allow here login as user'}
         return Response(data)
     complaints = ComplaintRegistration.objects.get(id = pk)
-    pinfo = PersonalInfo.objects.get(id = complaints.people.id)
+    print(complaints.people.id)
+    pinfo = PersonalInfo.objects.get(people = complaints.people.id)
     personal_info = PersonalInfoSerializerGet(pinfo)
     serializer = GetComplaints(complaints)
     return Response({"complaint":serializer.data,"personalinfo":personal_info.data})

@@ -9,6 +9,7 @@ import { Spinner } from 'react-bootstrap'
 
 
 
+
 const schema =  yup.object().shape({
   username: yup.string().required('This Field is Required'),
   password: yup.string().required('This Field is Required'),
@@ -26,6 +27,8 @@ const UserLogin = () => {
     <div>
 
 <Header/>
+
+
 <div className='d-flex justify-content-center' >
       <section className="d-flex justify-content-center">
 
@@ -69,8 +72,11 @@ const UserLogin = () => {
 </section>
 </div>
 
+
+
     </div>
   )
 }
 
 export default UserLogin
+
