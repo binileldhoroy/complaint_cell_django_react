@@ -34,6 +34,7 @@ class GetLawyerProfileSerializer(serializers.ModelSerializer):
 
 
 
+
 class GetPoliceInfoSerializer(serializers.ModelSerializer):
     police = GetRegistredUserSerializer()
     class Meta:

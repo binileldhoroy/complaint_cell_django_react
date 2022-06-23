@@ -16,7 +16,7 @@ import empty_gif from '../../../static/gif/emptystate.gif'
 const MyComplaints = () => {
 
     const {myComplaints,getMyComplaints,userProfile,userInfo,setComplaintSuccess} = useContext(AuthContext)
-    const navagat = useNavigate()
+    const navigate = useNavigate()
 
     useEffect(() => {
         getMyComplaints()
@@ -26,9 +26,9 @@ const MyComplaints = () => {
     const Register = () => {
         if (userInfo.complete_profile === true || userInfo.people.complete_profile === true) {
             setComplaintSuccess(false)
-            navagat('/register')
+            navigate('/register')
         }else{
-            navagat('/home')
+            navigate('/home')
             swal("Complete Profile", {
                 icon: "error",
               });
@@ -103,7 +103,11 @@ const MyComplaints = () => {
 
 
                             <div className='col-md-3' >
-                            <Button className='list_view_btn' type="submit">
+                            <Button className='list_view_btn' type="submit"
+                            onClick={() => {
+                                navigate(`/completed/${complaint.id}`);
+                              }}
+                            >
                                 <AiFillEye/>
                             </Button>
                             

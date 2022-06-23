@@ -18,7 +18,7 @@ urlpatterns = [
     path('lawyers-details/<str:pk>',views.viewLawyerDetails),
     path('accepted-complaints/',views.acceptComplaintUser),
     path('my-complaints/',views.myComplaints),
-    path('single-complaints/',views.singleComplaint),
+    path('single-complaints/<str:pk>',views.singleComplaint),
     path('forwardto-lawyer/',views.forwardToLawyer),
     path('police-district/',views.getPoliceDistrict),
     path('police-station/<str:pk>',views.getPoliceStation),

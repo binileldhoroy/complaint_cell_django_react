@@ -97,6 +97,7 @@ class ComplaintRegistration(models.Model):
     case_status  = models.CharField(max_length=150,choices=case_status,null=True)
     ref_number = models.CharField(max_length=12,blank=True,null=True)
     requested_date = models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    forwarded = models.BooleanField(default=False,null=True)
 
     def __str__(self):
         return self.complaint_nature

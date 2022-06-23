@@ -4,6 +4,7 @@ import {PoliceContext} from '../../context/PoliceContext';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Button from '@mui/material/Button';
 import PoliceHeader from '../../components/police/PoliceHeader'
+import { useNavigate } from 'react-router-dom';
 
 const AcceptedComplaints = () => {
 
@@ -11,6 +12,8 @@ const AcceptedComplaints = () => {
     useEffect(() => {
         getAcceptedComplaint()
     },[])
+
+    const navigate = useNavigate()
 
   return (
     <div>
@@ -42,10 +45,13 @@ const AcceptedComplaints = () => {
                 <td>{acceptedComplaint.people.phone}</td>
                 <td>{acceptedComplaint.complaint_nature}</td>
                 <td>{acceptedComplaint.case_status}</td>
-                <td>{(acceptedComplaint.incident_date).slice(0,10)}</td>
+                <td>{(acceptedComplaint.requested_date).slice(0,10)}</td>
                 <td>{acceptedComplaint.incident_place}</td>
                 <td>
-          <Button onClick={() => acceptedSingleComplaint(acceptedComplaint.id)}  variant="contained" startIcon={<VisibilityIcon/>}>
+          <Button onClick={ async () => {
+            await acceptedSingleComplaint(acceptedComplaint.id)
+            navigate(`/police/viewaccepted/${acceptedComplaint.id}`)
+          } }  variant="contained" startIcon={<VisibilityIcon/>}>
       </Button>
                 </td>
             </tr>

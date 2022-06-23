@@ -73,16 +73,23 @@ class RegistrationComplaintSerializer(serializers.ModelSerializer):
         model = ComplaintRegistration
         fields = '__all__'
 
-class LawyerListSerializer(serializers.ModelSerializer):
+class LawyerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id','first_name','last_name','email')
+       
 
 class LawyerListSerializer(serializers.ModelSerializer):
-    lawyer = LawyerListSerializer()
+    lawyer = LawyerSerializer()
     class Meta:
         model = Lawyer
         fields = ('lawyer','phone','enrollment_number','lawyer_image')
+
+class LawyerPersonalInfoSerializer(serializers.ModelSerializer):
+    lawyer_id = LawyerSerializer()
+    class Meta:
+        model = LawyerPersonalInfo
+        fields = '__all__' 
 
 
 class AssignedComplaintsSerializer(serializers.ModelSerializer):

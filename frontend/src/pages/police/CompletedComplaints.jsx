@@ -1,23 +1,40 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Table } from 'react-bootstrap'
 import PoliceHeader from '../../components/police/PoliceHeader'
 import {PoliceContext} from '../../context/PoliceContext'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Button from '@mui/material/Button';
 import ComplaintModal from './ComplaintModal';
+import { Box } from '@mui/system';
+import { Skeleton } from '@mui/material';
 
 
 
 const CompletedComplaints = () => {
 
     const {getCompletedComplaints,completedComplaints} = useContext(PoliceContext)
+    const [complaintLoader,setComplaintLoader] = useState(true)
+    const getComplaintFn = async () => {
+        await getCompletedComplaints()
+        setComplaintLoader(false)
+    }
     useEffect(() => {
-        getCompletedComplaints()
+        getComplaintFn()
     },[])
 
   return (
     <div>
         <PoliceHeader/>
+    {complaintLoader ? (
+        <div className="d-flex justify-content-center">
+            <Box sx={{ width: 600 }}>
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
+            </Box>
+          </div>)
+          : (
+
         <div className="container mt-4 p-2 profile-container mb-2">
         <h2>Completed Complaints</h2>
         <Table striped bordered hover>
@@ -55,7 +72,8 @@ const CompletedComplaints = () => {
     
   </tbody>
 </Table>
-        </div>
+        </div>)
+}
     </div>
   )
 }

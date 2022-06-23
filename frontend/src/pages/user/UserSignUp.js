@@ -10,7 +10,7 @@ import bg1 from "../../static/images/bg1.jpg";
 import { LoginContext } from "../../context/LoginContext";
 import DoneIcon from "@mui/icons-material/Done";
 import Footer from "../../components/Footer";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 const schema = yup.object().shape({
   firstname: yup.string().required("This field is required!"),
@@ -33,7 +33,16 @@ const schema = yup.object().shape({
 
 const UserSignUp = () => {
   const { signUpUser, errorMsg, signUpError } = useContext(AuthContext);
-  const { sendOtp, otpBtn, otpVerify,verifyOtp,doneOtp,singnUpLoading,errorOtp,verifyBtn } = useContext(LoginContext);
+  const {
+    sendOtp,
+    otpBtn,
+    otpVerify,
+    verifyOtp,
+    doneOtp,
+    singnUpLoading,
+    errorOtp,
+    verifyBtn,
+  } = useContext(LoginContext);
   const {
     register,
     handleSubmit,
@@ -180,14 +189,15 @@ const UserSignUp = () => {
                           <div className=" d-flex justify-content-center">
                             {otpBtn === true ? (
                               <Button
+                                className="btn  btn-success btn-block btn-lg gradient-custom-4 text-body"
                                 variant="primary"
                                 onClick={() => sendOtp(phone)}
                                 size="sm"
                               >
-                                Send OTP
-                                {singnUpLoading &&
-                                <Spinner animation="border" size='sm' />
-                                }
+                                Register
+                                {singnUpLoading && (
+                                  <Spinner animation="border" size="sm" />
+                                )}
                               </Button>
                             ) : (
                               <>
@@ -195,7 +205,7 @@ const UserSignUp = () => {
                                   className="mb-3 d-flex w-100"
                                   controlId="exampleForm.ControlInput1"
                                 >
-                                  <Form.Label  className="me-1 col-2">
+                                  <Form.Label className="me-1 col-2">
                                     Enter OTP
                                   </Form.Label>
 
@@ -205,24 +215,32 @@ const UserSignUp = () => {
                                     placeholder="Enter OTP"
                                     onChange={(e) => setOtp(e.target.value)}
                                   />
-                                  {verifyBtn &&
-                                  <Button
-                                    variant="primary"
-                                    className="me-1 col-2"
-                                    size="sm"
-                                    onClick={() => verifyOtp(otp,phone)}
-                                  >
-                                    {singnUpLoading === true ? 
-                                    (<Spinner animation="border"  />)
-                                    : "Verify OTP"}
-                                    
-                                  </Button>
-                                  }
-                                  {doneOtp && ( 
-                                  <DoneIcon color="success" style={{fontSize:"35px"}}/>)}
-                                  {errorOtp && 
-                                  <CloseIcon color="error" style={{fontSize:"35px"}}/>
-                                  }
+                                  {verifyBtn && (
+                                    <Button
+                                      variant="primary"
+                                      className="me-1 col-2"
+                                      size="sm"
+                                      onClick={() => verifyOtp(otp, phone)}
+                                    >
+                                      {singnUpLoading === true ? (
+                                        <Spinner animation="border" />
+                                      ) : (
+                                        "Verify OTP"
+                                      )}
+                                    </Button>
+                                  )}
+                                  {doneOtp && (
+                                    <DoneIcon
+                                      color="success"
+                                      style={{ fontSize: "35px" }}
+                                    />
+                                  )}
+                                  {errorOtp && (
+                                    <CloseIcon
+                                      color="error"
+                                      style={{ fontSize: "35px" }}
+                                    />
+                                  )}
                                 </Form.Group>
                               </>
                             )}
@@ -245,7 +263,7 @@ const UserSignUp = () => {
           </div>
         </section>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

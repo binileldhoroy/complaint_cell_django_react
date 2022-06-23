@@ -18,7 +18,7 @@ const SuccessPage = () => {
             <h2 className='head_text' >Complaint registered successfully</h2>
             <div className="success_table mx-5">
 
-            <Table bordered >
+            <Table className='success_table_view' bordered >
 
                 <tbody>
                 <tr>

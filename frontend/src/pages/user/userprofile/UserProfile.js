@@ -92,8 +92,8 @@ const UserProfile = () => {
                   }}
                   accept=".jpg,.jpeg,.png,"
                 />
-                <label for="upload_image">
-                  <span class="profilepic__icon">
+                <label htmlFor="upload_image">
+                  <span className="profilepic__icon">
                     <Avatar
                       alt=""
                       src={userInfo.user_image && userInfo.user_image}

@@ -9,3 +9,10 @@
     font-weight: bold;
     text-transform: capitalize;
 }
+
+.test_loader{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+}

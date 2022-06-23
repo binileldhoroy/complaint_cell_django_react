@@ -5,16 +5,18 @@ import {PoliceContext} from '../../context/PoliceContext'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Button from '@mui/material/Button';
 import Footer from '../../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
 const NewComplaints = () => {
 
-    const {newcomplaints,getNewcomplaints,getViewComplaint} = useContext(PoliceContext)
+    const {newcomplaints,getNewcomplaints} = useContext(PoliceContext)
     useEffect(() => {
         getNewcomplaints()
     },[])
+
+    const navigate = useNavigate()
 
   return (
     <div>
@@ -48,7 +50,7 @@ const NewComplaints = () => {
                 <td>{newcomplaint.incident_date ? (newcomplaint.incident_date).slice(0,10): 'Unknown'}</td>
                 <td>{newcomplaint.incident_place}</td>
                 <td>
-          <Button onClick={() => getViewComplaint(newcomplaint.id)} variant="contained" startIcon={<VisibilityIcon/>}>
+          <Button onClick={() => navigate(`/police/viewcomplaint/${newcomplaint.id}`)} variant="contained" startIcon={<VisibilityIcon/>}>
       </Button>
                 </td>
             </tr>

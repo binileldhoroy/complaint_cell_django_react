@@ -10,14 +10,19 @@ const ComplaintModal = ({id}) => {
     const [smShow, setSmShow] = useState(false);
     const [lgShow, setLgShow] = useState(false);
     const {viewComplaint,getViewComplaintModal} = useContext(PoliceContext)
-
+    const [fnComplaintLoader,setFnComplaintLoader] = useState(true)
+    const viewFnComplaintModal = async () => {
+        await getViewComplaintModal(id)
+        setFnComplaintLoader(false)
+        }
 
     return (
       <>
-        <Button onClick={ async () => { 
-          await getViewComplaintModal(id)
+        <Button onClick={ () => { 
+            viewFnComplaintModal()
            setLgShow(true)}}><VisibilityIcon/></Button>
-          
+
+{fnComplaintLoader ? ('') : 
         <Modal
           size="lg"
           show={lgShow}
@@ -42,7 +47,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Name</label>
                         </Col>
                         <Col md={6}>
-                            :<label className='label_value'>{viewComplaint && viewComplaint.complaint.people.people.first_name} {viewComplaint && viewComplaint.complaint.people.people.last_name}</label>
+                            :<label className='label_value'>{viewComplaint && viewComplaint?.complaint?.people.people.first_name} {viewComplaint && viewComplaint.complaint.people.people.last_name}</label>
                         </Col>
                     </Col>
 
@@ -249,7 +254,7 @@ const ComplaintModal = ({id}) => {
         </div>
           </Modal.Body>
         </Modal>
-  
+  }
       </>
     );
 }

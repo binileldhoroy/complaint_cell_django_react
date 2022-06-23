@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
     'storages',
+    'channels'
 ]
 
 REST_FRAMEWORK = {
@@ -119,6 +120,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'complaintcell.wsgi.application'
+ASGI_APPLICATION = 'complaintcell.asgi.application'
 
 
 # Database
@@ -191,3 +193,10 @@ AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, Stack } from '@mui/material'
 import { Card, Col, Modal, Row, Table } from 'react-bootstrap'
 import PoliceHeader from '../../components/police/PoliceHeader'
@@ -6,18 +6,33 @@ import { PoliceContext } from '../../context/PoliceContext'
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import './ViewComplaint.css'
+import { useParams } from 'react-router-dom'
+import SpinnerLoader from '../../components/loader/SpinnerLoader'
 
 
 
 const ViewComplaint = () => {
-    const {viewComplaint,acceptComplaint} = useContext(PoliceContext)
+    const {viewComplaint,acceptComplaint,getViewComplaint} = useContext(PoliceContext)
+    const params = useParams()
+    const [viewComplaintLoader,setViewComplaintLoader] = useState(true)
 
+    const viewComplaintFn = async () => {
+        await getViewComplaint(params.id)
+        setViewComplaintLoader(false)
+    }
 
+    useEffect(() => {
+        viewComplaintFn()
+    }, [])
 
 
   return (
     <div>
         <PoliceHeader/>
+        {viewComplaintLoader ?(
+            <SpinnerLoader/>
+        )  :
+        (
         <div className="container mt-4 p-2 profile-container mb-2">
         <h2>Complaint Info</h2>
         <Card className='mb-3'>
@@ -241,7 +256,8 @@ const ViewComplaint = () => {
         Accept
       </Button>
     </Stack>
-        </div>
+        </div>)
+        }
     </div>
   )
 }

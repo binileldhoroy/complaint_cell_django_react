@@ -5,6 +5,9 @@ from rest_framework import generics
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from lawyer.serializer import LawyerOfficeSerializer
+
+from police.serializer import GetComplaints
 
 from .models import *
 from .serializers import *
@@ -184,7 +187,7 @@ def viewLawyers(request):
         dist = pinfo.police_district
         lawyers = Lawyer.objects.filter(is_hire = True)
         dict_lawyers = lawyers.filter(officeaddress__office_city__contains = dist)
-        non_dict_lawyers = lawyers.exclude(officeaddress__office_city__contains = dist)
+        non_dict_lawyers = lawyers.exclude(officeaddress__office_city__contains = dist).order_by('-id')
         # l = dict_lawyers + non_dict_lawyers
         lawyer_list1 = LawyerListSerializer(dict_lawyers,many=True)
         lawyer_list = LawyerListSerializer(non_dict_lawyers,many=True)
@@ -206,7 +209,9 @@ def viewLawyerDetails(request,pk):
             data = {'status':'Lawyer didnt complete the profile'}
             return Response(data)
         serializers = GetLawyerProfileSerializer(pinfo)
-        return Response(serializers.data)
+        office = LawyerOfficeSerializer(lawyer.officeaddress)
+        data = {'profile':serializers.data,'office':office.data}
+        return Response(data)
     else:
         data = {'status':'You are not allowed here'}
         return Response(data)
@@ -256,9 +261,12 @@ def singleComplaint(request,pk):
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        complaint = ComplaintRegistration.objects.filter(id=pk)
-        serializer = ComplaintRegistrationSerializer(complaint)
-        return Response(serializer.data)
+        complaint = ComplaintRegistration.objects.get(id=pk)
+        print(people.id)
+        pinfo = PersonalInfo.objects.get(people = people.id)
+        personal_info = PersonalInfoSerializerGet(pinfo)
+        serializer = GetComplaints(complaint)
+        return Response({"complaint":serializer.data,"personalinfo":personal_info.data})
     else:
         data = 'Your account is blocked by Admin '
         return Response(data)
