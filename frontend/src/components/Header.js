@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import './Header.css'
 import { Link } from 'react-router-dom'
 import { AiOutlineLogin, AiOutlineUserAdd } from "react-icons/ai";
@@ -7,10 +7,27 @@ import logo from '../static/images/logo.png'
 import avater from '../static/images/avater.jpg'
 import {Dropdown, ButtonGroup} from 'react-bootstrap'
 import { LoginContext } from '../context/LoginContext';
+import { Badge, Popover, Typography } from '@mui/material';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+
 
 
 
 function Header() {
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const {user,logoutUser} = useContext(LoginContext)
 
@@ -35,6 +52,12 @@ function Header() {
   </label>
   { user ? (
      <ul className="menu">
+      <li  className='li_menu mt-3'>
+         <Badge badgeContent={4} color="primary">
+      <NotificationsIcon className='notification' color="action" />
+    </Badge>
+
+      </li>
      <li className='li_menu'>
          <div className="create-account m-2 d-flex flex-column">
             <p className="text-center mb-0"><AiOutlineUserAdd color='white'/>
@@ -62,9 +85,32 @@ function Header() {
    <li>
        <div className="create-account m-2 d-flex flex-column">
           <p className="text-center mb-0"><AiOutlineUserAdd color='white'/></p>
+
+
+          <Button className="create-btn" size="medium" style={{color:'white'}}  aria-describedby={id}  onClick={handleClick}>
+        Creat Account
+      </Button>
+      <Popover
+         id={id}
+         open={open}
+         anchorEl={anchorEl}
+         onClose={handleClose}
+         anchorOrigin={{
+           vertical: 'bottom',
+           horizontal: 'left',
+         }}
+      >
+        <Typography sx={{ p: 2 }}>
           <Link to="/signup">
-          <Button className="create-btn" size="medium" style={{color:'white'}}>Create Account</Button>
+          <Button  size="small">Create User Account</Button><br></br>
           </Link>
+          <Link to="/lawyer/signup">
+          <Button  size="small">Create Lawyer Account</Button>
+          </Link>
+        </Typography>
+      </Popover>
+    
+          
         </div>
       </li>
       <li>

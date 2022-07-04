@@ -20,6 +20,7 @@ class AddNote(models.Model):
     complaint = models.ForeignKey(ComplaintRegistration,on_delete=models.SET_NULL,null=True)
     note = models.CharField(max_length=150,null=True)
     created = models.DateTimeField(auto_now_add=True,null=True)
+    is_read = models.BooleanField(default=False,null=True)
 
     class Meta:
         ordering = ('-created',)

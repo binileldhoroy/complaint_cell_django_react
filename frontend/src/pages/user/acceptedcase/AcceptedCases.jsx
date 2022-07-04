@@ -57,7 +57,10 @@ const AcceptedCases = () => {
                       <td>{accepted.people.people.email}</td>
                       <td>{accepted.people.phone}</td>
                       <td>{accepted.complaint_nature}</td>
-                      <td>{accepted.case_status}</td>
+                      <td>
+                      {accepted.case_status}
+                      { accepted.forwarded &&  <span > & <span style={{color:'#08a420'}}>Forwarded</span></span>}
+                      </td>
                       <td>{accepted.requested_date.slice(0, 10)}</td>
                       <td>{accepted.incident_place}</td>
                       <td>

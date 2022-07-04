@@ -18,7 +18,7 @@ export const PoliceProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const baseUrl = "http://127.0.0.1:8000/api/police/";
-  const { authTokens } = useContext(LoginContext);
+  const { authTokens,toastError,toastSuccess } = useContext(LoginContext);
 
   const signUpPolice = async (e) => {
     await axios
@@ -38,7 +38,7 @@ export const PoliceProvider = ({ children }) => {
         navigate("/login");
       })
       .catch((err) => {
-        setSignUpError(err);
+        toastError(err.response.data);
       });
   };
 
@@ -99,7 +99,7 @@ export const PoliceProvider = ({ children }) => {
       })
       .then((res) => {
         console.log(res.data);
-        swal("Complaint Accepted", "", "success");
+        toastSuccess("Complaint Accepted");
         navigate("/police/home");
       })
       .catch((err) => {
@@ -149,7 +149,7 @@ export const PoliceProvider = ({ children }) => {
       })
       .then((res) => {
         console.log(res.data);
-        swal("Fir filed", "", "success");
+        toastSuccess("Fir filed");
         navigate("/police/home");
       })
       .catch((err) => {
@@ -190,7 +190,7 @@ export const PoliceProvider = ({ children }) => {
       )
       .then((res) => {
         console.log(res.data);
-        swal("Note added", "", "success");
+        toastSuccess("Note added");
       })
       .catch((err) => {
         console.log(err);

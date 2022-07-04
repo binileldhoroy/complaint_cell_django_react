@@ -230,7 +230,7 @@ const LawyerProfile = () => {
 
 <div>
 
-            <CaseModal/>
+            <CaseModal lawyerId={lawyerProfile.profile.lawyer_id.id}/>
 </div>
 
         </div>

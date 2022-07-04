@@ -9,4 +9,7 @@ urlpatterns = [
     path('add-office/',views.lawyerOfficeView),
     path('lawyer-profile/',views.lawyerProfile),
     path('requested-complaints/',views.assignedComplaints),
+    path('requested-complaint/<str:pk>',views.viewAssignedComplaints),
+    path('notes/<str:pk>',views.getNote),
+    path('accept-case/',views.lawyerCaseAccept),
 ]

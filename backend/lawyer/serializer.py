@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from .models import *
 
-from people.models import AssignedComplaints
+from people.models import AssignedComplaints, PaymentRequest
 from people.serializers import PeopleInfoGet,ComplaintRegistrationSerializer
 
 
@@ -72,4 +72,10 @@ class LawyerAssignedComplaints(serializers.ModelSerializer):
     complaint = ComplaintRegistrationSerializer()
     class Meta:
         model = AssignedComplaints
+        fields = '__all__'
+
+
+class LawyerCasseAcceptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentRequest
         fields = '__all__'

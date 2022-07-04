@@ -29,6 +29,14 @@ p {
     border: 2px solid #fff8d9 !important;
 }
 
+.lawyer_drop_down{
+    background-color: #ACA59D !important;
+    border: 1px solid #ACA59D !important;
+}
+
+
+
+
 .dropdown-menu{
     z-index: 3000 !important;
 
@@ -37,3 +45,36 @@ p {
 .li_menu{
     overflow: visible !important;
 }
+
+.top-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0f2755;
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #FFF;
+    height: 70px;
+    padding: 1em;
+  }
+
+.lawyer-top-nav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #457778;
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #FFF;
+    height: 70px;
+    padding: 1em;
+}
+
+.css-11pbyhm-MuiSvgIcon-root{
+    color: rgba(255, 255, 255, 0.54) !important;
+}
+
+.notification{
+    cursor: pointer;
+}
+

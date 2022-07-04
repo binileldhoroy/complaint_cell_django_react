@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
   const baseUrl = "http://127.0.0.1:8000/api/";
   // ueserLogin
-  const { logoutUser, authTokens } = useContext(LoginContext);
+  const { logoutUser, authTokens,toastError } = useContext(LoginContext);
 
   const signUpUser = async (e) => {
     await axios
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
         });
       })
       .catch((err) => {
-        setSignUpError(err.response.data);
+        toastError(err.response.data.error);
       });
   };
 
@@ -77,7 +77,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUserProfile = async (e) => {
-    console.log("hh");
     await axios
       .post(
         `${baseUrl}personalinfo/`,
@@ -264,6 +263,26 @@ const [lawyerProfile, setLawyerProfile] = useState();
   })
 }
 
+const forwardToLawyer = async (caseValue,lawyerId) => {
+
+ 
+
+      await axios.post(`${baseUrl}forwardto-lawyer/`, {
+        complaint: caseValue,
+        lawyer: lawyerId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${authTokens.access}`,
+        }
+      }).then((res) => {
+        console.log(res.data);
+        navigate('/completed')
+      }).catch((err) => {
+        console.log(err);
+      })
+
+}
+
 
 
   const contextData = {
@@ -301,6 +320,7 @@ const [lawyerProfile, setLawyerProfile] = useState();
     lawyersList,
     getLawyerProfile,
     lawyerProfile,
+    forwardToLawyer,
   };
 
   return (

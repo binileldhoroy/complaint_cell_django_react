@@ -9,6 +9,7 @@ import UserLanding from "./pages/user/UserLanding";
 import { AuthProvider } from "./context/UserContext";
 import {
   PrivateRouteAdmin,
+  PrivateRouteLawyer,
   PrivateRoutePeople,
   PrivateRoutePolice,
 } from "./utils/PrivateRoute";
@@ -37,12 +38,20 @@ import AcceptedCases from "./pages/user/acceptedcase/AcceptedCases";
 import UserViewComplaint from "./pages/user/viewcomplaint/UserViewComplaint";
 import ViewLawyers from "./pages/user/lawyerlist/ViewLawyers";
 import LawyerProfile from "./pages/user/lawyerprofile/LawyerProfile";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SingleCase from "./pages/lawyer/singlecase/SingleCase";
+import Footer from "./components/Footer";
+import ViewAcceptedCase from "./pages/lawyer/acceptedcase/ViewAcceptedCase";
+
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" >
+    <div style={{minHeight:'90vh'}}>
       <BrowserRouter>
         <LoginProvider>
+        <ToastContainer />
           {/* user routes */}
           <AuthProvider>
             <Routes>
@@ -236,11 +245,33 @@ function App() {
           <LawyerProvider>
             <Routes>
               <Route path="/lawyer/signup" element={<LawyerSignup />} />
-              <Route path="/lawyer/lawyer-home" element={<LawyerHome />} />
+              <Route path="/lawyer/lawyer-home" element={
+                <PrivateRouteLawyer>
+                  <LawyerHome />
+                </PrivateRouteLawyer>
+              } />
+
+              <Route path="/lawyer/viewcase/:id" element={
+                <PrivateRouteLawyer>
+                  <SingleCase />
+                </PrivateRouteLawyer>
+              } />
+
+<Route path="/lawyer/accepted" element={
+                <PrivateRouteLawyer>
+                  <ViewAcceptedCase />
+                </PrivateRouteLawyer>
+              } />
+
             </Routes>
+            
           </LawyerProvider>
         </LoginProvider>
       </BrowserRouter>
+      </div>
+
+            <Footer/>
+
     </div>
   );
 }

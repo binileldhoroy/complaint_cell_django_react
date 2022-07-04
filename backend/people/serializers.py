@@ -1,3 +1,4 @@
+from requests import delete
 from rest_framework import serializers 
 from django.contrib.auth.password_validation import validate_password
 from people.models import *
@@ -24,10 +25,11 @@ class RegisterSerializer(serializers.ModelSerializer):
                 {"number": "Number already exits."})
 
         return attrs
+    
 
     def create(self, validated_data):
         user = User.objects.create(
-            username=validated_data['username'],first_name=validated_data['first_name'],last_name=validated_data['last_name'],email=validated_data['email']
+            username=validated_data['username'],first_name=validated_data['first_name'],last_name=validated_data['last_name'],email=validated_data['email'],is_active=False
         )
 
         user.set_password(validated_data['password'])

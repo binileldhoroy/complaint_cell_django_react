@@ -5,3 +5,11 @@
 .txt_b{
     color: rgb(117, 117, 117);
 }
+
+.empty_msg{
+    display: flex;
+    justify-content: center;
+    height: 12rem;
+    padding: 0;
+    margin: 0;
+}

@@ -1,43 +1,45 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import LawyerHeader from '../../../components/lawyer/LawyerHeader'
+import { ReadMore } from '../../police/ViewComplaint'
+import { Card, Col, Row, Spinner } from 'react-bootstrap'
 import { Button, Stack } from '@mui/material'
-import { Card, Col, Modal, Row} from 'react-bootstrap'
-import { PoliceContext } from '../../context/PoliceContext'
-import './ViewComplaint.css'
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { ReadMore } from './ViewComplaint'
+import { LawyerContext } from '../../../context/LawyerContext'
+import ViewNoteModal from './ViewNoteModal'
+import CloseIcon from '@mui/icons-material/Close';
+import DoneIcon from '@mui/icons-material/Done';
+import Footer from '../../../components/Footer'
 
-const ComplaintModal = ({id}) => {
-    const [smShow, setSmShow] = useState(false);
-    const [lgShow, setLgShow] = useState(false);
-    const {viewComplaint,getViewComplaintModal} = useContext(PoliceContext)
-    const [fnComplaintLoader,setFnComplaintLoader] = useState(true)
-    const viewFnComplaintModal = async () => {
-        await getViewComplaintModal(id)
-        setFnComplaintLoader(false)
-        }
 
-    return (
-      <>
-        <Button onClick={ () => { 
-            viewFnComplaintModal()
-           setLgShow(true)}}><VisibilityIcon/></Button>
+const SingleCase = () => {
+    
+    const {singleComplaint,getSingleComplaint,singleCase,lawyerCaseAccept} = useContext(LawyerContext)
 
-{fnComplaintLoader ? ('') : 
-        <Modal
-          size="lg"
-          show={lgShow}
-          onHide={() => setLgShow(false)}
-          aria-labelledby="example-modal-sizes-title-lg"
-        >
-         
-           <Modal.Header closeButton>
-            <Modal.Title id="example-modal-sizes-title-lg">
+    const [singleLoader, setSingleLoader] = useState(true)
+    const params = useParams()
 
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          <div className="container mt-4 p-2 profile-container mb-2">
+    const callComplaint = async () => {
+        await getSingleComplaint(params.id)
+        setSingleLoader(false)
+    }
+
+    useEffect(() => {
+        callComplaint()
+    },[])
+
+
+
+  return (
+    <>
+    {singleLoader ? (
+        <Spinner animation="border" role="status" className='test_loader' />
+        ) : (
+    <div>
+        <LawyerHeader/>
+
+        <div className="container mt-4 p-2 profile-container mb-2">
         <h2>Complaint Info</h2>
+        
         <Card className='mb-3'>
             <Card.Body>
                 <h2>Profile Information</h2>
@@ -47,7 +49,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Name</label>
                         </Col>
                         <Col md={6}>
-                            :<label className='label_value'>{viewComplaint && viewComplaint?.complaint?.people.people.first_name} {viewComplaint && viewComplaint.complaint.people.people.last_name}</label>
+                            :<label className='label_value'>{singleCase && singleCase.complaint.people.people.first_name} {singleCase && singleCase.complaint.people.people.last_name}</label>
                         </Col>
                     </Col>
 
@@ -56,28 +58,40 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Email</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.people.people.email}</label>
+                            :<label>{singleCase && singleCase.complaint.people.people.email}</label>
                         </Col>
                     </Col>
 
 
-                    <Col md={6} className="row  ms-2">
+                    <Col md={6} className="row mb-3  ms-2">
                         <Col md={6}>
                             <label className="label_name">Phone</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.people.phone}</label>
+                            :<label>{singleCase && singleCase.complaint.people.phone}</label>
                         </Col>
                     </Col>
 
-                    {/* <Col md={6} className="row ms-2">
+                    <Col md={6} className="row  ms-2">
                         <Col md={6}>
-                            <label>Email</label>
+                            <label className="label_name">DOB</label>
                         </Col>
                         <Col md={6}>
-                            :<label>athul@gmail.com</label>
+                            :<label>{singleCase && singleCase.userinfo?.dob}</label>
                         </Col>
-                    </Col> */}
+                    </Col>
+
+
+
+                    <Col md={6} className="row mb-3  ms-2">
+                        <Col md={6}>
+                            <label className="label_name">Gender</label>
+                        </Col>
+                        <Col md={6}>
+                            :<label>{singleCase && singleCase.userinfo.gender}</label>
+                        </Col>
+                    </Col>
+
                     
                 </Row>
             </Card.Body>
@@ -85,14 +99,15 @@ const ComplaintModal = ({id}) => {
 
         <Card className='mb-3'>
             <Card.Body>
-                <h2>Complaint Information</h2>
+                <h2 >Complaint Information</h2>
+                
                 <Row>
                     <Col md={6} className="row mb-3   ms-2">
                         <Col md={6}>
                             <label className="label_name">Complaint Nature</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.complaint_nature}</label>
+                            :<label>{singleCase && singleCase.complaint.complaint.complaint_nature}</label>
                         </Col>
                     </Col>
                     <Col md={6} className="row mb-3   ms-2">
@@ -100,7 +115,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Complaint status/Case Status</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.complaint_status}/{viewComplaint && viewComplaint.complaint.case_status}</label>
+                            :<label>{singleCase && singleCase.complaint.complaint.complaint_status}/{singleCase && singleCase.complaint.case_status}</label>
                         </Col>
                     </Col>
 
@@ -109,7 +124,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Place of Incident</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.incident_place}</label>
+                            :<label>{singleCase && singleCase.complaint.complaint.incident_place}</label>
                         </Col>
                     </Col>
 
@@ -119,7 +134,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Ref Number</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.ref_number}</label>
+                            :<label>{singleCase && singleCase.complaint.complaint.ref_number}</label>
                         </Col>
                     </Col>
 
@@ -129,7 +144,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Date of Incident</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{ viewComplaint.complaint.incident_date ?(viewComplaint.complaint.incident_date).slice(0,10): 'Unknown'}</label>
+                            :<label>{singleCase.complaint.complaint.incident_date ? (singleCase.complaint.complaint.incident_date).slice(0,10) : 'Unknown'}</label>
                         </Col>
                     </Col>
 
@@ -139,8 +154,8 @@ const ComplaintModal = ({id}) => {
                         </Col>
                         <Col md={6}>
                            
-                            :<label>{viewComplaint && (viewComplaint.complaint.compalaint_description).substring(0,30)}.... </label>
-                            <span><ReadMore description={viewComplaint && (viewComplaint.complaint.compalaint_description)} /></span>
+                            :<label>{singleCase && (singleCase.complaint.complaint.compalaint_description).substring(0,30)}.... </label>
+                            <span><ReadMore description={singleCase && (singleCase.complaint.complaint.compalaint_description)} /></span>
                         </Col>
                     </Col>
                     
@@ -150,7 +165,8 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">File Discription</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.complaint.file_discription}</label>          </Col>
+                            :<label>{singleCase && singleCase.complaint.complaint.file_discription}</label>          
+                            </Col>
                     </Col>
 
                     <Col md={6} className="row mb-3  ms-2">
@@ -158,27 +174,31 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">File Discription</label>
                         </Col>
                         <Col md={6}>
-                            : <a href={viewComplaint && viewComplaint.complaint.file_upload} target="_blank" rel="noopener">
+                            : <a href={singleCase && singleCase.complaint.complaint.file_upload} target="_blank" rel="noopener">
                 <Button className="btn-lg" variant="outlined">View Document</Button>
                 </a>
                         </Col>
                     </Col>
                     
                 </Row>
+                <div className='mb-1 me-2'>
+
+        <ViewNoteModal id={params.id}/>
+        </div>
             </Card.Body>
         </Card>
 
 
         <Card className='mb-3'>
             <Card.Body>
-                <h2>Personal Information</h2>
+                <h2>Address</h2>
                 <Row>
                     <Col md={6} className="row  ms-2">
                         <Col md={6}>
                             <label className="label_name">House No</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.house_number}</label>
+                            :<label>{singleCase && singleCase.userinfo.house_number}</label>
                         </Col>
                     </Col>
 
@@ -187,7 +207,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">House Name</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.house_name}</label>
+                            :<label>{singleCase && singleCase.userinfo.house_name}</label>
                         </Col>
                     </Col>
 
@@ -197,7 +217,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Locality</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.locality}</label>
+                            :<label>{singleCase && singleCase.userinfo.locality}</label>
                         </Col>
                     </Col>
 
@@ -206,7 +226,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Village</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.village}</label>
+                            :<label>{singleCase && singleCase.userinfo.village}</label>
                         </Col>
                     </Col>
 
@@ -215,7 +235,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Police Station</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.police_station}</label>
+                            :<label>{singleCase && singleCase.userinfo.police_station}</label>
                         </Col>
                     </Col>
 
@@ -224,7 +244,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Police District</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.police_district}</label>
+                            :<label>{singleCase && singleCase.userinfo.police_district}</label>
                         </Col>
                     </Col>
 
@@ -234,7 +254,7 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">State</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.state}</label>
+                            :<label>{singleCase && singleCase.userinfo.state}</label>
                         </Col>
                     </Col>
 
@@ -243,20 +263,29 @@ const ComplaintModal = ({id}) => {
                             <label className="label_name">Pin Code</label>
                         </Col>
                         <Col md={6}>
-                            :<label>{viewComplaint && viewComplaint.personalinfo.pin_code}</label>
+                            :<label>{singleCase && singleCase.userinfo.pin_code}</label>
                         </Col>
                     </Col>
                     
                 </Row>
             </Card.Body>
         </Card>
-
+        <Stack direction="row" spacing={2} className="d-flex justify-content-center">
+      <Button type="reset" variant="outlined" startIcon={<CloseIcon />}>
+      Refuse
+      </Button>
+      <Button type="submit" onClick={() => {
+        lawyerCaseAccept(singleCase.complaint.people.id,singleCase.consulten_fee,singleCase.complaint.complaint.id)
+      }}   variant="contained" endIcon={<DoneIcon />}>
+        Accept
+      </Button>
+    </Stack>
         </div>
-          </Modal.Body>
-        </Modal>
-  }
-      </>
-    );
+
+    </div>
+        )}
+    </>
+  )
 }
 
-export default ComplaintModal
+export default SingleCase

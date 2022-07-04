@@ -1,0 +1,26 @@
+.leads{
+    background-color: #17A2B8;
+    margin-top: 2rem;
+    margin-left: 2rem;
+}
+
+.accepted{
+    background-color: #F0AD4E;
+    margin-top: 2rem;
+    margin-left: 2rem;
+}
+
+.lawyer_complaint_card{
+    background-color: #EEEEEE;
+}
+
+.card_banner_log{
+    display: flex !important;
+    float: inline-end   !important;
+    margin-top: 1rem !important;
+    float: right
+}
+
+.lawyer_home_accepted{
+    cursor: pointer;
+}

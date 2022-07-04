@@ -116,6 +116,7 @@ class AssignedComplaints(models.Model):
     lawyer = models.ForeignKey(Lawyer, on_delete=models.CASCADE,null=True)
     complaint = models.ForeignKey(ComplaintRegistration,on_delete=models.CASCADE,null=True)
     is_accept = models.BooleanField(default=False)
+    request_date = models.DateTimeField(auto_now_add=True,blank=True,null=True)
 
 
 
@@ -131,3 +132,17 @@ class PoliceStation(models.Model):
 
     def __str__(self):
         return self.police_station
+
+payment_status = [
+    ('completed','completed'),
+    ('pending','pending'),
+]
+
+class PaymentRequest(models.Model):
+    lawyer_id = models.ForeignKey(Lawyer,on_delete=models.CASCADE,null=True)
+    people = models.ForeignKey(People,on_delete=models.CASCADE,null=True)
+    complaint = models.ForeignKey(ComplaintRegistration,on_delete=models.CASCADE,null=True)
+    amount = models.IntegerField(null=True)
+    date = models.DateField(null=True)
+    payment_type = models.CharField(max_length=150,null=True)
+    payment_status = models.CharField(max_length=150,null=True, choices=payment_status)

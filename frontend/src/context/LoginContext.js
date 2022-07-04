@@ -3,6 +3,7 @@ import jwt_decode from "jwt-decode";
 import axios from 'axios'
 import swal from 'sweetalert'
 import {useNavigate} from 'react-router-dom'
+import {  toast } from 'react-toastify'
 
 
 export const LoginContext = createContext()
@@ -26,6 +27,48 @@ export const LoginProvider = ({children}) => {
     const navagat = useNavigate()
 
     const baseUrl = 'http://127.0.0.1:8000/api/'
+
+
+    const toastWarning = (msg) => {
+        toast.warn(msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+    }
+
+    const toastError = (msg) => {
+        toast.error(msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+    }
+
+    const toastSuccess = (msg) => {
+        toast.success(msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+    }
+
+
     // ueserLogin
 
     const loginUser = async (e) => {
@@ -67,9 +110,7 @@ export const LoginProvider = ({children}) => {
             console.log(err.response.data);
             setErrorMsg(err.response.data.detail)
             setLoginLoading(true)
-            swal("invalid user", {
-                icon: "error",
-              });       
+            toastWarning('invalid username or password')      
         })
     } 
 
@@ -164,6 +205,8 @@ export const LoginProvider = ({children}) => {
             })
     }
 
+    
+
 
     const loginContextData = {
         loginUser,
@@ -184,6 +227,9 @@ export const LoginProvider = ({children}) => {
         singnUpLoading,
         errorOtp,
         verifyBtn,
+        toastWarning,   
+        toastError,
+        toastSuccess,
     }
 
     return (

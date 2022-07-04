@@ -46,7 +46,7 @@ const CompletedComplaints = () => {
       <th> Phone</th>
       <th>Complaint Nature</th>
       <th>Status</th>
-      <th>Date</th>
+      <th>Date of incident</th>
       <th>Incident Place</th>
       <th>View</th>
     </tr>
@@ -61,7 +61,7 @@ const CompletedComplaints = () => {
                 <td>{completedComplaint.people.phone}</td>
                 <td>{completedComplaint.complaint_nature}</td>
                 <td>{completedComplaint.complaint_status}</td>
-                <td>{(completedComplaint.incident_date).slice(0,10)}</td>
+                <td>{completedComplaint.incident_date ? (completedComplaint.incident_date).slice(0,10): 'Unknown'}</td>
                 <td>{completedComplaint.incident_place}</td>
                 <td>
                     <ComplaintModal id={completedComplaint.id}/>

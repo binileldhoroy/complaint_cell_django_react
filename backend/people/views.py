@@ -12,7 +12,7 @@ from police.serializer import GetComplaints
 from .models import *
 from .serializers import *
 
-from lawyer.models import Lawyer,LawyerPersonalInfo
+from lawyer.models import Lawyer, LawyerPersonalInfo
 from dashboard.serializers import GetLawyerProfileSerializer
 
 from police.models import Police
@@ -23,35 +23,34 @@ from twilio.rest import Client
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod                                                                    
+    @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
 
         # Add custom claims
         token['username'] = user.username
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
             userType = 'is_user'
         except:
             userType = None
 
         if userType == None:
             try:
-                people = Lawyer.objects.get(lawyer = user)
+                people = Lawyer.objects.get(lawyer=user)
                 userType = 'is_lawyer'
             except:
                 userType = None
 
         if userType == None:
             try:
-                people = Police.objects.get(police = user)
+                people = Police.objects.get(police=user)
                 userType = 'is_police'
             except:
                 userType = None
 
         if userType == None and user.is_superuser:
             userType = 'is_superuser'
-
 
         token['type'] = userType
         # ...
@@ -61,6 +60,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -90,14 +90,14 @@ def personalView(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
         serializers = PersonalInfoSerializer(data=request.data)
         if serializers.is_valid():
-            serializers.save(people = people,pinfo_complete=True)
-            People.objects.filter(people = user).update(complete_profile=True)
+            serializers.save(people=people, pinfo_complete=True)
+            People.objects.filter(people=user).update(complete_profile=True)
             return Response(serializers.data)
         else:
             data = serializers.errors
@@ -106,19 +106,20 @@ def personalView(request):
         data = 'Your account is blocked by Admin '
         return Response(data)
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def userProfile(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
 
         # try:
-        profile_complete = PersonalInfo.objects.filter(people = people)
+        profile_complete = PersonalInfo.objects.filter(people=people)
         # except:
         #     profile_complete = {'pinfo_complete' : False}
         #     # profile_complete.pinfo_complete = False
@@ -130,8 +131,8 @@ def userProfile(request):
         if profile_get:
             if people.is_people:
                 user = request.user
-                people = People.objects.get(people = user)
-                pinfo = PersonalInfo.objects.get(people = people)
+                people = People.objects.get(people=user)
+                pinfo = PersonalInfo.objects.get(people=people)
                 serializers = PersonalInfoSerializerGet(pinfo)
                 return Response(serializers.data)
             else:
@@ -151,17 +152,17 @@ def complaintRegistration(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
         name = UserInfo(user)
-        profile_complete = PersonalInfo.objects.get(people = people)
+        profile_complete = PersonalInfo.objects.get(people=people)
         if profile_complete.pinfo_complete:
             serializers = RegistrationComplaintSerializer(data=request.data)
             if serializers.is_valid():
-                serializers.save(people = people)
-                return Response({'responce':serializers.data,'profile':name.data})
+                serializers.save(people=people)
+                return Response({'responce': serializers.data, 'profile': name.data})
             else:
                 data = serializers.errors
                 return Response(data)
@@ -179,19 +180,21 @@ def viewLawyers(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        pinfo = PersonalInfo.objects.get(people = people)
+        pinfo = PersonalInfo.objects.get(people=people)
         dist = pinfo.police_district
-        lawyers = Lawyer.objects.filter(is_hire = True)
-        dict_lawyers = lawyers.filter(officeaddress__office_city__contains = dist)
-        non_dict_lawyers = lawyers.exclude(officeaddress__office_city__contains = dist).order_by('-id')
+        lawyers = Lawyer.objects.filter(is_hire=True)
+        dict_lawyers = lawyers.filter(
+            officeaddress__office_city__contains=dist)
+        non_dict_lawyers = lawyers.exclude(
+            officeaddress__office_city__contains=dist).order_by('-id')
         # l = dict_lawyers + non_dict_lawyers
-        lawyer_list1 = LawyerListSerializer(dict_lawyers,many=True)
-        lawyer_list = LawyerListSerializer(non_dict_lawyers,many=True)
-        return Response({"on_district":lawyer_list1.data,"non_district":lawyer_list.data})
+        lawyer_list1 = LawyerListSerializer(dict_lawyers, many=True)
+        lawyer_list = LawyerListSerializer(non_dict_lawyers, many=True)
+        return Response({"on_district": lawyer_list1.data, "non_district": lawyer_list.data})
     else:
         data = 'Your account is blocked by Admin '
         return Response(data)
@@ -199,22 +202,23 @@ def viewLawyers(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def viewLawyerDetails(request,pk):
+def viewLawyerDetails(request, pk):
     if request.user.is_active:
-        user = User.objects.get(id = pk)
-        lawyer = Lawyer.objects.get(lawyer = user)
+        user = User.objects.get(id=pk)
+        lawyer = Lawyer.objects.get(lawyer=user)
         try:
-            pinfo = LawyerPersonalInfo.objects.get(lawyer_id = lawyer)
+            pinfo = LawyerPersonalInfo.objects.get(lawyer_id=lawyer)
         except:
-            data = {'status':'Lawyer didnt complete the profile'}
+            data = {'status': 'Lawyer didnt complete the profile'}
             return Response(data)
         serializers = GetLawyerProfileSerializer(pinfo)
         office = LawyerOfficeSerializer(lawyer.officeaddress)
-        data = {'profile':serializers.data,'office':office.data}
+        data = {'profile': serializers.data, 'office': office.data}
         return Response(data)
     else:
-        data = {'status':'You are not allowed here'}
+        data = {'status': 'You are not allowed here'}
         return Response(data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -222,16 +226,18 @@ def acceptComplaintUser(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        complaint = ComplaintRegistration.objects.filter(people = people, case_status = 'FIR Registred')
-        serializer = ComplaintRegistrationSerializer(complaint,many=True)
+        complaint = ComplaintRegistration.objects.filter(
+            people=people, case_status='FIR Registred')
+        serializer = ComplaintRegistrationSerializer(complaint, many=True)
         return Response(serializer.data)
     else:
         data = 'Your account is blocked by Admin '
         return Response(data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -239,12 +245,12 @@ def myComplaints(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        complaint = ComplaintRegistration.objects.filter(people = people)
-        serializer = ComplaintRegistrationSerializer(complaint,many=True)
+        complaint = ComplaintRegistration.objects.filter(people=people)
+        serializer = ComplaintRegistrationSerializer(complaint, many=True)
         return Response(serializer.data)
     else:
         data = 'Your account is blocked by Admin '
@@ -253,20 +259,20 @@ def myComplaints(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def singleComplaint(request,pk):
+def singleComplaint(request, pk):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
         complaint = ComplaintRegistration.objects.get(id=pk)
         print(people.id)
-        pinfo = PersonalInfo.objects.get(people = people.id)
+        pinfo = PersonalInfo.objects.get(people=people.id)
         personal_info = PersonalInfoSerializerGet(pinfo)
         serializer = GetComplaints(complaint)
-        return Response({"complaint":serializer.data,"personalinfo":personal_info.data})
+        return Response({"complaint": serializer.data, "personalinfo": personal_info.data})
     else:
         data = 'Your account is blocked by Admin '
         return Response(data)
@@ -278,48 +284,54 @@ def forwardToLawyer(request):
     if request.user.is_active:
         user = request.user
         try:
-            people = People.objects.get(people = user)
+            people = People.objects.get(people=user)
         except:
             data = {'You are not allow here login as user'}
             return Response(data)
-        serializer = AssignedComplaintsSerializer(data = request.data)
+        serializer = AssignedComplaintsSerializer(data=request.data)
+        complantId = request.data['complaint']
         if serializer.is_valid():
-            serializer.save(people = people)
-            return Response(serializer.data)
+            serializer.save(people=people)
+            ComplaintRegistration.objects.filter(
+                id=complantId).update(forwarded=True)
+            return Response({'data': serializer.data, 'status': 'Complaint Forwarded'})
         else:
             data = serializer.errors
             return Response(data)
     else:
         data = 'Your account is blocked by Admin '
-        return Response(data)       
+        return Response(data)
 
 
 @api_view(['GET'])
 def getPoliceDistrict(request):
     police_dist = PoliceDistrict.objects.filter().order_by('police_district')
-    serializer = PoliceDistrictSerializer(police_dist,many=True)
+    serializer = PoliceDistrictSerializer(police_dist, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
-def getPoliceStation(request,pk):
-    police_station = PoliceStation.objects.filter(police_district = pk).order_by('police_station')
-    serializer = PoliceStationSerializer(police_station,many=True)
+def getPoliceStation(request, pk):
+    police_station = PoliceStation.objects.filter(
+        police_district=pk).order_by('police_station')
+    serializer = PoliceStationSerializer(police_station, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
-def otp_login_code(request) :
+def otp_login_code(request):
     number = '+91'+str(request.data['mobile_no'])
     account_sid = config('account_sid')
     auth_token = config('auth_token')
     client = Client(account_sid, auth_token)
     verification = client.verify \
-                    .services(config('messaging_service_sid')) \
-                    .verifications \
-                    .create(to=number, channel='sms')
+        .services(config('messaging_service_sid')) \
+        .verifications \
+        .create(to=number, channel='sms')
 
     print(verification.status)
     return Response(verification.status)
+
 
 @api_view(['POST'])
 def otp_verify_code(request):
@@ -330,8 +342,8 @@ def otp_verify_code(request):
     auth_token = config('auth_token')
     client = Client(account_sid, auth_token)
     verification_check = client.verify \
-                        .services(config('messaging_service_sid')) \
-                        .verification_checks \
-                        .create(to= number, code= str(otp))
+        .services(config('messaging_service_sid')) \
+        .verification_checks \
+        .create(to=number, code=str(otp))
 
     return Response(verification_check.status)

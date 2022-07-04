@@ -22,17 +22,7 @@ p {
     background-color: #95989e !important;
 }
 
-.top-nav {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #0f2755;
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: #FFF;
-  height: 70px;
-  padding: 1em;
-}
+
 
 .menu {
   display: flex;

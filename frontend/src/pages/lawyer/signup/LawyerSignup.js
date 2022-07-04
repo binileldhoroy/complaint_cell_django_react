@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { LawyerContext } from "../../../context/LawyerContext";
+import Header from "../../../components/Header";
 
 
 const schema = yup.object().shape({
@@ -36,6 +37,7 @@ const LawyerSignup = (e) => {
 
   return (
     <div>
+      <Header/>
       <h1 className="text-uppercase text-center mt-5">Layer SignUp</h1>
       <div className="d-flex text-align-center justify-content-center  m-5 container">
           <form onSubmit={handleSubmit(signUpLawyer)} encType="multipart/form-data">

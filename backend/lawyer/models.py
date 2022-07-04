@@ -47,3 +47,6 @@ class OfficeAddress(models.Model):
     office_district = models.CharField(max_length=150,null=True)
     consulten_fee = models.IntegerField(null=True)
 
+
+
+
