@@ -7,7 +7,7 @@ import accepted from "../../static/images/accepted.jpeg";
 import lawyer from "../../static/images/lawyer.jpg";
 import fir from "../../static/images/fir.png";
 import payment from "../../static/images/payment.png";
-import faq from "../../static/images/faq.png";
+import chat from "../../static/images/chat.png";
 import Footer from "../../components/Footer";
 import { AuthContext } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -135,7 +135,7 @@ const UserLanding = () => {
           >
             <Card className="home_card" style={{ width: "18rem" }}>
               <div className="card_img">
-                <Card.Img className="home-img" variant="top" src={faq} />
+                <Card.Img className="home-img" variant="top" src={chat} />
               </div>
               <Card.Body>
                 <Button className="home-btn" variant="outline-secondary">
