@@ -98,6 +98,7 @@ class AssignedComplaintsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssignedComplaints
         fields = '__all__'
+        depth = 2
 
 
 class PoliceDistrictSerializer(serializers.ModelSerializer):
@@ -110,3 +111,17 @@ class PoliceStationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PoliceStation
         fields = '__all__'
+
+class GetAssignedComplaintsSerializer(serializers.ModelSerializer):
+    complaint = ComplaintRegistrationSerializer()
+    class Meta:
+        model = AssignedComplaints
+        fields = '__all__'
+
+
+class GetPaymentDetailsUserSerializer(serializers.ModelSerializer):
+    lawyerinfo = LawyerListSerializer()
+    getcomplaint = GetAssignedComplaintsSerializer()
+    class Meta:
+        model = PaymentRequest
+        fields = ['id','lawyer_id','people','complaint','amount','date','payment_type','payment_status','lawyerinfo','getcomplaint']

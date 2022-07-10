@@ -146,3 +146,6 @@ class PaymentRequest(models.Model):
     date = models.DateField(null=True)
     payment_type = models.CharField(max_length=150,null=True)
     payment_status = models.CharField(max_length=150,null=True, choices=payment_status)
+    payment_date = models.DateField(null=True,blank=True)
+    payment_id = models.CharField(max_length=150,null=True,blank=True)
+    is_paid = models.BooleanField(default=False)

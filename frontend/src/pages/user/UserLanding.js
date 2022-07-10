@@ -118,7 +118,9 @@ const UserLanding = () => {
                 <Card.Img className="home-img " variant="top" src={payment} />
               </div>
               <Card.Body>
-                <Button className="home-btn" variant="outline-secondary">
+                <Button className="home-btn" onClick={() => {
+                  navigate("/payment");
+                }} variant="outline-secondary">
                   Payment History
                 </Button>
               </Card.Body>
@@ -144,7 +146,6 @@ const UserLanding = () => {
           </Col>
         </Row>
       </div>
-      <Footer />
     </div>
   );
 };

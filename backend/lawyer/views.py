@@ -161,3 +161,21 @@ def lawyerCaseAccept(request):
     else:
         data = [serializer.errors]
         return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def lawyerAcceptedCase(request):
+    user = request.user
+    try:
+        lawyer = Lawyer.objects.get(lawyer = user)
+    except:
+        data = {'You are not allow here login as user'}
+        return Response(data)
+    payments = PaymentRequest.objects.filter(lawyer_id = lawyer)
+    for payment in payments:
+        payment.getcomplaint = AssignedComplaints.objects.get(complaint = payment.complaint,is_accept = True)
+        payment.save()
+    payment_details = GetPaymentDetailsSerializer(payments,many=True)
+
+    return Response(payment_details.data)

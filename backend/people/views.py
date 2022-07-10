@@ -1,11 +1,15 @@
+from datetime import datetime
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
+import json
+import razorpay
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from lawyer.serializer import LawyerOfficeSerializer
+from lawyer.serializer import GetPaymentDetailsSerializer, LawyerOfficeSerializer
 
 from police.serializer import GetComplaints
 
@@ -347,3 +351,154 @@ def otp_verify_code(request):
         .create(to=number, code=str(otp))
 
     return Response(verification_check.status)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMyPayments(request):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people=user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        payments = PaymentRequest.objects.filter(people=people,payment_status='pending').order_by('date')
+        for payment in payments:
+            payment.lawyerinfo = Lawyer.objects.get(id = payment.lawyer_id.id)
+            payment.getcomplaint = AssignedComplaints.objects.get(complaint = payment.complaint.id,is_accept = True)
+            payment.save()
+        serializer = GetPaymentDetailsUserSerializer(payments, many=True)
+        return Response(serializer.data)
+    else:
+        data = {'status': 'You are not allowed here'}
+        return Response(data)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMyCompletedPayments(request):
+    if request.user.is_active:
+        user = request.user
+        try:
+            people = People.objects.get(people=user)
+        except:
+            data = {'You are not allow here login as user'}
+            return Response(data)
+        payments = PaymentRequest.objects.filter(people=people,payment_status='completed',is_paid=True).order_by('date')
+        for payment in payments:
+            payment.lawyerinfo = Lawyer.objects.get(id = payment.lawyer_id.id)
+            payment.getcomplaint = AssignedComplaints.objects.get(complaint = payment.complaint.id,is_accept = True)
+            payment.save()
+        serializer = GetPaymentDetailsUserSerializer(payments, many=True)
+        return Response(serializer.data)
+    else:
+        data = {'status': 'You are not allowed here'}
+        return Response(data)
+
+
+
+
+
+@api_view(['POST'])
+def startPayment(request):
+    # request.data is coming from frontend
+    amount = request.data['amount']
+    name = request.data['name']
+    complaint_id = request.data['complaint_id']
+
+    # setup razorpay client this is the client to whome user is paying money that's you
+    client = razorpay.Client(auth=(config('PUBLIC_KEY'), config('SECRET_KEY')))
+
+    # create razorpay order
+    # the amount will come in 'paise' that means if we pass 50 amount will become
+    # 0.5 rupees that means 50 paise so we have to convert it in rupees. So, we will 
+    # mumtiply it by 100 so it will be 50 rupees.
+    payment = client.order.create({"amount": int(amount) * 100, 
+                                   "currency": "INR", 
+                                   "payment_capture": "1"})
+
+    # we are saving an order with isPaid=False because we've just initialized the order
+    # we haven't received the money we will handle the payment succes in next 
+    # function
+    order = PaymentRequest.objects.filter(complaint=complaint_id)
+    order.update(is_paid=False,payment_id=payment['id'])
+    # lawyer_id = order[0].lawyer_id.id
+    # real_amount = OfficeAddress.objects.get(office=lawyer_id).consulten_fee
+    # if real_amount != amount:
+    #     data = {'status': 'false', 'message': 'Amount is not matching'}
+    #     return Response(data)
+
+
+    serializer = AssignedComplaintsSerializer(order)
+
+    """order response will be 
+    {'id': 17, 
+    'order_date': '23 January 2021 03:28 PM', 
+    'order_product': '**product name from frontend**', 
+    'order_amount': '**product amount from frontend**', 
+    'order_payment_id': 'order_G3NhfSWWh5UfjQ', # it will be unique everytime
+    'isPaid': False}"""
+
+    data = {
+        "payment": payment,
+        "order": serializer.data
+    }
+    return Response(data)
+
+
+
+
+@api_view(['POST'])
+def handlePaymentSuccess(request):
+    # request.data is coming from frontend
+    res = json.loads(request.data["response"])
+
+    """res will be:
+    {'razorpay_payment_id': 'pay_G3NivgSZLx7I9e', 
+    'razorpay_order_id': 'order_G3NhfSWWh5UfjQ', 
+    'razorpay_signature': '76b2accbefde6cd2392b5fbf098ebcbd4cb4ef8b78d62aa5cce553b2014993c0'}
+    this will come from frontend which we will use to validate and confirm the payment
+    """
+
+    ord_id = ""
+    raz_pay_id = ""
+    raz_signature = ""
+
+    # res.keys() will give us list of keys in res
+    for key in res.keys():
+        if key == 'razorpay_order_id':
+            ord_id = res[key]
+        elif key == 'razorpay_payment_id':
+            raz_pay_id = res[key]
+        elif key == 'razorpay_signature':
+            raz_signature = res[key]
+
+    # get order by payment_id which we've created earlier with isPaid=False
+    order = PaymentRequest.objects.filter(payment_id=ord_id)
+    
+    # we will pass this whole data in razorpay client to verify the payment
+    data = {
+        'razorpay_order_id': ord_id,
+        'razorpay_payment_id': raz_pay_id,
+        'razorpay_signature': raz_signature
+    }
+
+    client = razorpay.Client(auth=(config('PUBLIC_KEY'), config('SECRET_KEY')))
+
+    # checking if the transaction is valid or not by passing above data dictionary in 
+    # razorpay client if it is "valid" then check will return None
+    check = client.utility.verify_payment_signature(data)
+    if check == None or check == "":
+        return Response({'error': 'Something went wrong','status': 'false'})
+
+    # if payment is successful that means check is None then we will turn isPaid=True
+    order.update(is_paid = True,payment_status='completed',payment_date=datetime.now())
+
+    res_data = {
+        'message': 'payment successfully received!',
+        'status':'true'
+    }
+
+    return Response(res_data)

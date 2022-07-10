@@ -233,9 +233,9 @@ export const LoginProvider = ({children}) => {
     }
 
     return (
-        <LoginContext.Provider value = {loginContextData}>
+            <LoginContext.Provider value = {loginContextData}>
             {children}
-        </LoginContext.Provider>
+            </LoginContext.Provider>
     )
 
 }

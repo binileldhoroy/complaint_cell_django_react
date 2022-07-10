@@ -79,3 +79,10 @@ class LawyerCasseAcceptSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentRequest
         fields = '__all__'
+
+
+class GetPaymentDetailsSerializer(serializers.ModelSerializer):
+    getcomplaint = LawyerAssignedComplaints()
+    class Meta:
+        model = PaymentRequest
+        fields = ['id','lawyer_id','people','complaint','amount','date','payment_type','payment_status','getcomplaint']

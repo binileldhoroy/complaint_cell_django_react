@@ -127,6 +127,20 @@ export const LawyerProvider = ({children}) => {
   }})
   }
 
+  const [acceptedDetails,setAcceptedDetails] = useState([])
+  const getLawyerAccepedCases = async () => {
+    await axios.get(`${baseUrl}accepted/`,{
+        headers: {
+            Authorization: `Bearer ${authTokens.access}`,
+        }
+    }).then(res => {
+        setAcceptedDetails(res.data)
+    }).catch(err => {
+        console.log(err);
+    }
+    )
+  }
+
     const contextData = {
         signUpLawyer,
         errorMsg,
@@ -136,7 +150,7 @@ export const LawyerProvider = ({children}) => {
         singleCase,
         getSingleComplaint,complaintNotes,getNotes,
         lawyerCaseAccept,
-        acceptCaseCount,
+        acceptCaseCount,getLawyerAccepedCases,acceptedDetails,
     }
 
     return(

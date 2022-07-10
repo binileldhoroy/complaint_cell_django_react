@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
   const [complaintLoader, setComplaintLoader] = useState(false);
   const [acceptedCase, setAcceptedCase] = useState([]);
   const [singleComplaint, setSingleComplaint] = useState([]);
+  
 
 
   const navigate = useNavigate();
@@ -283,9 +284,42 @@ const forwardToLawyer = async (caseValue,lawyerId) => {
 
 }
 
+const [myPayments, setMyPayments] = useState([]);
 
+const getMyPayments = async () => {
+  await axios.get(`${baseUrl}my-payments/`, {
+    headers: {
+      Authorization: `Bearer ${authTokens.access}`,
+    }
+  }).then((res) => {
+    console.log(res.data);
+    setMyPayments(res.data);
+  }).catch((err) => {
+    console.log(err);
+  })
+}
+
+const [myCompletedPayments, setMyCompletedPayments] = useState([]);
+
+const getMyCompletedPayments = async () => {
+  await axios.get(`${baseUrl}payment-completed/`, {
+    headers: {
+      Authorization: `Bearer ${authTokens.access}`,
+    }
+  }).then((res) => {
+    console.log(res.data);
+    setMyCompletedPayments(res.data);
+  }).catch((err) => {
+    console.log(err);
+  })
+}
+
+
+const [complaintId, setComplaintId] = useState("");
+  const [amount, setAmount] = useState([]);
 
   const contextData = {
+    baseUrl,
     errorMsg,
     signUpUser,
     signUpError,
@@ -321,6 +355,14 @@ const forwardToLawyer = async (caseValue,lawyerId) => {
     getLawyerProfile,
     lawyerProfile,
     forwardToLawyer,
+    getMyPayments,
+    myPayments,
+    setComplaintId,
+    complaintId,
+    setAmount,
+    amount,
+    myCompletedPayments,
+    getMyCompletedPayments
   };
 
   return (

@@ -43,6 +43,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import SingleCase from "./pages/lawyer/singlecase/SingleCase";
 import Footer from "./components/Footer";
 import ViewAcceptedCase from "./pages/lawyer/acceptedcase/ViewAcceptedCase";
+import MyPayments from "./pages/user/payment/MyPayments";
+import PaymentRazorpay from "./pages/user/payment/PaymentRazorpay";
 
 
 function App() {
@@ -128,6 +130,25 @@ function App() {
                   </PrivateRoutePeople>
                 }
               />
+
+            <Route
+                path="/payment"
+                element={
+                  <PrivateRoutePeople>
+                    <MyPayments/>
+                  </PrivateRoutePeople>
+                }
+              />
+
+              <Route
+                path="/makepayment"
+                element={
+                  <PrivateRoutePeople>
+                    <PaymentRazorpay/>
+                  </PrivateRoutePeople>
+                }
+              />
+
             </Routes>
           </AuthProvider>
 
