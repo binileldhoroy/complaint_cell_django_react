@@ -139,7 +139,7 @@ const UserLanding = () => {
               </div>
               <Card.Body>
                 <Button className="home-btn" variant="outline-secondary">
-                  F.A.Q
+                  Chat
                 </Button>
               </Card.Body>
             </Card>

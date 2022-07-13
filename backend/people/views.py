@@ -424,11 +424,6 @@ def startPayment(request):
     # function
     order = PaymentRequest.objects.filter(complaint=complaint_id)
     order.update(is_paid=False,payment_id=payment['id'])
-    # lawyer_id = order[0].lawyer_id.id
-    # real_amount = OfficeAddress.objects.get(office=lawyer_id).consulten_fee
-    # if real_amount != amount:
-    #     data = {'status': 'false', 'message': 'Amount is not matching'}
-    #     return Response(data)
 
 
     serializer = AssignedComplaintsSerializer(order)
@@ -502,3 +497,13 @@ def handlePaymentSuccess(request):
     }
 
     return Response(res_data)
+
+
+@api_view(['GET'])
+def startChat(request):
+    pass
+
+
+@api_view(['GET'])
+def room(request,room_name):
+    pass

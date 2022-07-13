@@ -27,6 +27,7 @@ urlpatterns = [
     path('my-payments/',views.getMyPayments),
     path('payment-completed/',views.getMyCompletedPayments),
     path('pay/', views.startPayment, name="payment"),
-    path('payment/success/', views.handlePaymentSuccess, name="payment_success")
-
+    path('payment/success/', views.handlePaymentSuccess, name="payment_success"),
+    path('chat/',views.startChat,name='chat'),
+    path('<str:room_name>/',views.room)
 ]

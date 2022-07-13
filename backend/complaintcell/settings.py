@@ -120,7 +120,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'complaintcell.wsgi.application'
-ASGI_APPLICATION = 'complaintcell.asgi.application'
+ASGI_APPLICATION = 'complaintcell.routing.application'
 
 
 # Database

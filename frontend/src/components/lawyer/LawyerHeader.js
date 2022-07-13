@@ -5,7 +5,8 @@ import { AiOutlineLogin, AiOutlineUserAdd } from "react-icons/ai";
 import Button from '@mui/material/Button';
 import logo from '../../static/images/logo.png'
 import {Dropdown, ButtonGroup} from 'react-bootstrap'
-import { Popover, Typography } from '@mui/material';
+import { Badge, Popover, Typography } from '@mui/material';
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { LoginContext } from '../../context/LoginContext';
 
 const LawyerHeader = () => {
@@ -48,6 +49,12 @@ const LawyerHeader = () => {
   </label>
   { user ? (
      <ul className="menu">
+      <li  className='li_menu mt-3'>
+         <Badge badgeContent={4} color="primary">
+      <NotificationsIcon className='notification' color="action" />
+    </Badge>
+
+      </li>
      <li className='li_menu'>
          <div className="create-account m-2 d-flex flex-column">
             <p className="text-center mb-0"><AiOutlineUserAdd color='white'/>

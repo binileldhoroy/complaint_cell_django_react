@@ -8,7 +8,7 @@ import { LawyerContext } from '../../../context/LawyerContext'
 import ViewNoteModal from './ViewNoteModal'
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
-import Footer from '../../../components/Footer'
+import ChatIcon from '@mui/icons-material/Chat';
 
 
 const SingleCase = () => {
@@ -38,7 +38,21 @@ const SingleCase = () => {
         <LawyerHeader/>
 
         <div className="container mt-4 p-2 profile-container mb-2">
-        <h2>Complaint Info</h2>
+            <div className="row">
+                <div className="col-md-6">
+                <h2>Complaint Info</h2>
+                </div>
+                <div className="col-md-6">
+
+        {singleCase && singleCase.payment_status === 'completed' ? (
+        <div className='d-flex justify-content-end me-4 '>
+        <Button variant="contained" endIcon={<ChatIcon />}>
+  Start Chat
+</Button>
+        </div>) : ''
+}
+                </div>
+            </div>
         
         <Card className='mb-3'>
             <Card.Body>
@@ -270,7 +284,9 @@ const SingleCase = () => {
                 </Row>
             </Card.Body>
         </Card>
-        <Stack direction="row" spacing={2} className="d-flex justify-content-center">
+        {singleCase && singleCase.complaint.is_accept ? '':
+
+        (<Stack direction="row" spacing={2} className="d-flex justify-content-center">
       <Button type="reset" variant="outlined" startIcon={<CloseIcon />}>
       Refuse
       </Button>
@@ -279,7 +295,8 @@ const SingleCase = () => {
       }}   variant="contained" endIcon={<DoneIcon />}>
         Accept
       </Button>
-    </Stack>
+    </Stack>)
+}
         </div>
 
     </div>

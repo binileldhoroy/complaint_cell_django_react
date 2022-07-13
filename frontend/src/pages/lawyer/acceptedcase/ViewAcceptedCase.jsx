@@ -1,5 +1,5 @@
 import React, { useContext,useEffect, useState } from 'react'
-import { Table } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 import LawyerHeader from '../../../components/lawyer/LawyerHeader'
 import { LawyerContext } from '../../../context/LawyerContext'
 import PropTypes from 'prop-types';
@@ -7,6 +7,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useNavigate } from 'react-router-dom';
+import { AiFillEye } from 'react-icons/ai';
 
 
 
@@ -56,8 +58,9 @@ const ViewAcceptedCase = () => {
     acceptedDetails && setPendingPayment(acceptedDetails.filter(accept => accept.payment_status === 'pending'))
     acceptedDetails && setCompletedPayment(acceptedDetails.filter(accept => accept.payment_status === 'completed'))
   },[acceptedDetails])
-  const [value, setValue] = useState(0);
 
+  const [value, setValue] = useState(0);
+  const navigate = useNavigate()
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -112,8 +115,10 @@ const ViewAcceptedCase = () => {
         <tr>
           <th>Case No.</th>
           <th>Name</th>
+          <th>Username</th>
           <th>Email</th>
           <th>Amount</th>
+          <th>Date</th>
           <th>Payment Status</th>
         </tr>
       </thead>
@@ -127,7 +132,15 @@ const ViewAcceptedCase = () => {
               <td>{completed.getcomplaint.complaint.people.people.email}</td>
               <td>{completed.amount}</td>
               <td>{completed.date}</td>
-              <td>{completed.payment_status}</td>
+              <td style={{color:'green'}}>{completed.payment_status}</td>
+              <td>
+              <Button className='list_view_btn' onClick={() => {
+                  navigate(`/lawyer/viewcase/${completed.getcomplaint.id}`)
+                }} type="submit"
+                >
+                    <AiFillEye/>
+                </Button>
+              </td>
             </tr>
           )
         })}

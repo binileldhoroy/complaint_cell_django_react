@@ -118,13 +118,19 @@ def viewAssignedComplaints(request,pk):
         data = {'You are not allow here login as user'}
         return Response(data)
     complaint = AssignedComplaints.objects.get(id = pk)
-    print(complaint.people)
     serializer = LawyerAssignedComplaints(complaint)
     userInfo = PersonalInfoSerializer(PersonalInfo.objects.get(people = complaint.people))
     ofiice = OfficeAddress.objects.get(office = lawyer)
     office_info = LawyerOfficeSerializer(ofiice)
     consulten_fee = office_info.data['consulten_fee']
-    return Response({'complaint':serializer.data,'userinfo':userInfo.data,'consulten_fee':consulten_fee})
+    try:
+        payment = PaymentRequest.objects.get(complaint = complaint.complaint)
+        payment_seri = LawyerCasseAcceptSerializer(payment)
+        payment_status = payment_seri.data['payment_status']
+        print(payment_seri.data['payment_status'])
+    except:
+        payment_status = 'Not Paid'
+    return Response({'complaint':serializer.data,'userinfo':userInfo.data,'consulten_fee':consulten_fee,'payment_status':payment_status})
     
 
 @api_view(['GET'])
